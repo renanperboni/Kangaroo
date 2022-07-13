@@ -1,0 +1,374 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+	<xs:element name="CodeGenerator" nillable="true" type="CodeGenerator" />
+	<xs:complexType name="CodeGenerator">
+		<xs:sequence>
+			<xs:element minOccurs="0" maxOccurs="unbounded" name="Entity" type="Entity" />
+			<xs:element minOccurs="0" maxOccurs="unbounded" name="Summary" type="Summary" />
+			<xs:element minOccurs="0" maxOccurs="unbounded" name="Enum" type="Enum" />
+			<xs:element minOccurs="0" maxOccurs="unbounded" name="CustomRequest" type="CustomRequest" />
+			<xs:element minOccurs="0" maxOccurs="unbounded" name="CustomResponse" type="CustomResponse" />
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="Entity">
+		<xs:sequence>
+			<xs:element minOccurs="0" maxOccurs="1" name="EntityFields" type="Fields" />
+			<xs:element minOccurs="0" maxOccurs="1" name="GenerateDatabaseEntity" type="GenerateDatabaseEntity" />
+			<xs:element minOccurs="0" maxOccurs="unbounded" name="GenerateAutoMapper" type="GenerateAutoMapper" />
+			<xs:element minOccurs="0" maxOccurs="1" name="GenerateEntityHandlerRequest" type="GenerateEntityHandlerRequest" />
+			<xs:element minOccurs="0" maxOccurs="1" name="GenerateEntityGetterRequest" type="GenerateEntityGetterRequest" />
+			<xs:element minOccurs="0" maxOccurs="1" name="GenerateEntitiesGetterRequest" type="GenerateEntitiesGetterRequest" />
+			<xs:element minOccurs="0" maxOccurs="1" name="AdditionalUsings" type="AdditionalUsings" />
+			<xs:element minOccurs="0" maxOccurs="1" name="CustomAttributes" type="CustomAttributes" />
+		</xs:sequence>
+		<xs:attribute name="Name" type="xs:string" />
+		<xs:attribute name="PluralName" type="xs:string" />
+		<xs:attribute default="Both" name="Location" type="Location" />
+		<xs:attribute default="true" name="IncludeAuditLog" type="xs:boolean" />
+		<xs:attribute default="true" name="IncludeRowVersionControl" type="xs:boolean" />
+		<xs:attribute default="true" name="IncludeDataState" type="xs:boolean" />
+	</xs:complexType>
+	<xs:complexType name="Fields">
+		<xs:sequence>
+			<xs:element minOccurs="0" maxOccurs="1" name="KeyField" type="KeyField" />
+			<xs:element minOccurs="0" maxOccurs="unbounded" name="StringField" type="StringField" />
+			<xs:element minOccurs="0" maxOccurs="unbounded" name="BoolField" type="BoolField" />
+			<xs:element minOccurs="0" maxOccurs="unbounded" name="DateTimeField" type="DateTimeField" />
+			<xs:element minOccurs="0" maxOccurs="unbounded" name="DateTimeOffsetField" type="DateTimeOffsetField" />
+			<xs:element minOccurs="0" maxOccurs="unbounded" name="DecimalField" type="DecimalField" />
+			<xs:element minOccurs="0" maxOccurs="unbounded" name="IntField" type="IntField" />
+			<xs:element minOccurs="0" maxOccurs="unbounded" name="CollectionField" type="CollectionField" />
+			<xs:element minOccurs="0" maxOccurs="unbounded" name="EntityCollectionField" type="EntityCollectionField" />
+			<xs:element minOccurs="0" maxOccurs="unbounded" name="SummaryField" type="SummaryField" />
+			<xs:element minOccurs="0" maxOccurs="unbounded" name="EnumField" type="EnumField" />
+			<xs:element minOccurs="0" maxOccurs="unbounded" name="EntityField" type="EntityField" />
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="KeyField">
+		<xs:sequence>
+			<xs:element minOccurs="0" maxOccurs="1" name="CustomAttributes" type="CustomAttributes" />
+		</xs:sequence>
+		<xs:attribute name="Name" type="xs:string" />
+		<xs:attribute default="Both" name="Location" type="Location" />
+		<xs:attribute name="KeyType" type="KeyType" use="required" />
+	</xs:complexType>
+	<xs:complexType name="CustomAttributes">
+		<xs:sequence>
+			<xs:element minOccurs="0" maxOccurs="unbounded" name="CustomAttribute" type="CustomAttribute" />
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="CustomAttribute">
+		<xs:attribute name="Attribute" type="xs:string" />
+		<xs:attribute default="Both" name="Location" type="Location" />
+	</xs:complexType>
+	<xs:simpleType name="Location">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="Both" />
+			<xs:enumeration value="Backend" />
+			<xs:enumeration value="Frontend" />
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="KeyType">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="Int" />
+			<xs:enumeration value="Guid" />
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:complexType name="StringField">
+		<xs:sequence>
+			<xs:element minOccurs="0" maxOccurs="1" name="CustomAttributes" type="CustomAttributes" />
+		</xs:sequence>
+		<xs:attribute name="Name" type="xs:string" />
+		<xs:attribute default="Both" name="Location" type="Location" />
+		<xs:attribute default="false" name="IsRequired" type="xs:boolean" />
+		<xs:attribute default="" name="DefaultValue" type="xs:string" />
+		<xs:attribute default="255" name="MaxLength" type="xs:int" />
+	</xs:complexType>
+	<xs:complexType name="BoolField">
+		<xs:sequence>
+			<xs:element minOccurs="0" maxOccurs="1" name="CustomAttributes" type="CustomAttributes" />
+		</xs:sequence>
+		<xs:attribute name="Name" type="xs:string" />
+		<xs:attribute default="Both" name="Location" type="Location" />
+		<xs:attribute default="false" name="IsRequired" type="xs:boolean" />
+		<xs:attribute default="false" name="DefaultValue" type="xs:boolean" />
+	</xs:complexType>
+	<xs:complexType name="DateTimeField">
+		<xs:sequence>
+			<xs:element minOccurs="0" maxOccurs="1" name="CustomAttributes" type="CustomAttributes" />
+		</xs:sequence>
+		<xs:attribute name="Name" type="xs:string" />
+		<xs:attribute default="Both" name="Location" type="Location" />
+		<xs:attribute default="false" name="IsRequired" type="xs:boolean" />
+	</xs:complexType>
+	<xs:complexType name="DateTimeOffsetField">
+		<xs:sequence>
+			<xs:element minOccurs="0" maxOccurs="1" name="CustomAttributes" type="CustomAttributes" />
+		</xs:sequence>
+		<xs:attribute name="Name" type="xs:string" />
+		<xs:attribute default="Both" name="Location" type="Location" />
+		<xs:attribute default="false" name="IsRequired" type="xs:boolean" />
+	</xs:complexType>
+	<xs:complexType name="DecimalField">
+		<xs:sequence>
+			<xs:element minOccurs="0" maxOccurs="1" name="CustomAttributes" type="CustomAttributes" />
+		</xs:sequence>
+		<xs:attribute name="Name" type="xs:string" />
+		<xs:attribute default="Both" name="Location" type="Location" />
+		<xs:attribute default="false" name="IsRequired" type="xs:boolean" />
+		<xs:attribute default="0" name="DefaultValue" type="xs:decimal" />
+		<xs:attribute name="Precision" type="xs:int" use="required" />
+		<xs:attribute name="Scale" type="xs:int" use="required" />
+	</xs:complexType>
+	<xs:complexType name="IntField">
+		<xs:sequence>
+			<xs:element minOccurs="0" maxOccurs="1" name="CustomAttributes" type="CustomAttributes" />
+		</xs:sequence>
+		<xs:attribute name="Name" type="xs:string" />
+		<xs:attribute default="Both" name="Location" type="Location" />
+		<xs:attribute default="false" name="IsRequired" type="xs:boolean" />
+		<xs:attribute default="0" name="DefaultValue" type="xs:int" />
+	</xs:complexType>
+	<xs:complexType name="CollectionField">
+		<xs:sequence>
+			<xs:element minOccurs="0" maxOccurs="1" name="CustomAttributes" type="CustomAttributes" />
+		</xs:sequence>
+		<xs:attribute name="Name" type="xs:string" />
+		<xs:attribute default="Both" name="Location" type="Location" />
+		<xs:attribute default="false" name="IsRequired" type="xs:boolean" />
+		<xs:attribute name="Type" type="xs:string" />
+	</xs:complexType>
+	<xs:complexType name="EntityCollectionField">
+		<xs:sequence>
+			<xs:element minOccurs="0" maxOccurs="1" name="CustomAttributes" type="CustomAttributes" />
+		</xs:sequence>
+		<xs:attribute name="Name" type="xs:string" />
+		<xs:attribute default="Both" name="Location" type="Location" />
+		<xs:attribute default="false" name="IsRequired" type="xs:boolean" />
+		<xs:attribute name="Type" type="xs:string" />
+	</xs:complexType>
+	<xs:complexType name="SummaryField">
+		<xs:sequence>
+			<xs:element minOccurs="0" maxOccurs="1" name="CustomAttributes" type="CustomAttributes" />
+		</xs:sequence>
+		<xs:attribute name="Name" type="xs:string" />
+		<xs:attribute default="Both" name="Location" type="Location" />
+		<xs:attribute default="false" name="IsRequired" type="xs:boolean" />
+		<xs:attribute name="Type" type="xs:string" />
+		<xs:attribute default="" name="IsSummaryFor" type="xs:string" />
+	</xs:complexType>
+	<xs:complexType name="EnumField">
+		<xs:sequence>
+			<xs:element minOccurs="0" maxOccurs="1" name="CustomAttributes" type="CustomAttributes" />
+		</xs:sequence>
+		<xs:attribute name="Name" type="xs:string" />
+		<xs:attribute default="Both" name="Location" type="Location" />
+		<xs:attribute default="false" name="IsRequired" type="xs:boolean" />
+		<xs:attribute name="Type" type="xs:string" />
+		<xs:attribute default="" name="IsEnumFor" type="xs:string" />
+	</xs:complexType>
+	<xs:complexType name="EntityField">
+		<xs:sequence>
+			<xs:element minOccurs="0" maxOccurs="1" name="CustomAttributes" type="CustomAttributes" />
+		</xs:sequence>
+		<xs:attribute name="Name" type="xs:string" />
+		<xs:attribute default="Both" name="Location" type="Location" />
+		<xs:attribute default="false" name="IsRequired" type="xs:boolean" />
+		<xs:attribute name="Type" type="xs:string" />
+	</xs:complexType>
+	<xs:complexType name="GenerateDatabaseEntity">
+		<xs:sequence>
+			<xs:element minOccurs="0" maxOccurs="1" name="AdditionalFields" type="Fields" />
+			<xs:element minOccurs="0" maxOccurs="1" name="IgnoreFields" type="IgnoreFields" />
+			<xs:element minOccurs="0" maxOccurs="1" name="ForeignKeyFields" type="ForeignKeyFields" />
+			<xs:element minOccurs="0" maxOccurs="1" name="GenerateDatabaseEntityConfiguration" type="GenerateDatabaseEntityConfiguration" />
+			<xs:element minOccurs="0" maxOccurs="1" name="AdditionalUsings" type="AdditionalUsings" />
+			<xs:element minOccurs="0" maxOccurs="1" name="CustomAttributes" type="CustomAttributes" />
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="IgnoreFields">
+		<xs:sequence>
+			<xs:element minOccurs="0" maxOccurs="unbounded" name="IgnoreField" type="IgnoreField" />
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="IgnoreField">
+		<xs:attribute name="Name" type="xs:string" />
+	</xs:complexType>
+	<xs:complexType name="ForeignKeyFields">
+		<xs:sequence>
+			<xs:element minOccurs="0" maxOccurs="unbounded" name="ForeignKeyField" type="ForeignKeyField" />
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="ForeignKeyField">
+		<xs:attribute name="EntityFieldName" type="xs:string" />
+		<xs:attribute name="IsForeignKeyFor" type="xs:string" />
+	</xs:complexType>
+	<xs:complexType name="GenerateDatabaseEntityConfiguration">
+		<xs:sequence>
+			<xs:element minOccurs="0" maxOccurs="1" name="Indexes" type="Indexes" />
+			<xs:element minOccurs="0" maxOccurs="1" name="AdditionalUsings" type="AdditionalUsings" />
+			<xs:element minOccurs="0" maxOccurs="1" name="CustomAttributes" type="CustomAttributes" />
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="Indexes">
+		<xs:sequence>
+			<xs:element minOccurs="0" maxOccurs="unbounded" name="IndexField" type="IndexField" />
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="IndexField">
+		<xs:attribute name="FieldName" type="xs:string" />
+	</xs:complexType>
+	<xs:complexType name="AdditionalUsings">
+		<xs:sequence>
+			<xs:element minOccurs="0" maxOccurs="unbounded" name="Using" type="Using" />
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="Using">
+		<xs:attribute name="Content" type="xs:string" />
+	</xs:complexType>
+	<xs:complexType name="GenerateAutoMapper">
+		<xs:sequence>
+			<xs:element minOccurs="0" maxOccurs="1" default="Entity" name="AutoMapperSourceType" type="AutoMapperSourceType" />
+			<xs:element minOccurs="0" maxOccurs="1" name="IgnoreFields" type="IgnoreFields" />
+			<xs:element minOccurs="0" maxOccurs="1" name="AdditionalUsings" type="AdditionalUsings" />
+			<xs:element minOccurs="0" maxOccurs="1" name="CustomAttributes" type="CustomAttributes" />
+		</xs:sequence>
+		<xs:attribute default="" name="DatabaseEntityName" type="xs:string" />
+	</xs:complexType>
+	<xs:simpleType name="AutoMapperSourceType">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="DatabaseEntity" />
+			<xs:enumeration value="Entity" />
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:complexType name="GenerateEntityHandlerRequest">
+		<xs:sequence>
+			<xs:element minOccurs="0" maxOccurs="1" name="AdditionalFields" type="Fields" />
+			<xs:element minOccurs="0" maxOccurs="1" name="GenerateController" type="GenerateController" />
+			<xs:element minOccurs="0" maxOccurs="1" name="GenerateEntityHandlerService" type="GenerateEntityHandlerService" />
+			<xs:element minOccurs="0" maxOccurs="1" name="AdditionalUsings" type="AdditionalUsings" />
+			<xs:element minOccurs="0" maxOccurs="1" name="CustomAttributes" type="CustomAttributes" />
+		</xs:sequence>
+		<xs:attribute default="" name="DatabaseEntityName" type="xs:string" />
+	</xs:complexType>
+	<xs:complexType name="GenerateController">
+		<xs:sequence>
+			<xs:element minOccurs="0" maxOccurs="1" name="Permissions" type="Permissions" />
+			<xs:element minOccurs="0" maxOccurs="1" name="AdditionalUsings" type="AdditionalUsings" />
+			<xs:element minOccurs="0" maxOccurs="1" name="CustomAttributes" type="CustomAttributes" />
+		</xs:sequence>
+		<xs:attribute default="" name="UseExistingInterfaceServiceName" type="xs:string" />
+		<xs:attribute default="" name="UseExistingServiceMethodName" type="xs:string" />
+		<xs:attribute default="true" name="GenerateAPIClient" type="xs:boolean" />
+		<xs:attribute default="true" name="IsAuthenticationRequired" type="xs:boolean" />
+	</xs:complexType>
+	<xs:complexType name="Permissions">
+		<xs:sequence>
+			<xs:element minOccurs="0" maxOccurs="unbounded" name="Permission" type="Permission" />
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="Permission">
+		<xs:attribute name="Name" type="xs:string" />
+	</xs:complexType>
+	<xs:complexType name="GenerateEntityHandlerService">
+		<xs:sequence>
+			<xs:element minOccurs="0" maxOccurs="1" name="AdditionalUsings" type="AdditionalUsings" />
+			<xs:element minOccurs="0" maxOccurs="1" name="CustomAttributes" type="CustomAttributes" />
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="GenerateEntityGetterRequest">
+		<xs:sequence>
+			<xs:element minOccurs="0" maxOccurs="1" name="AdditionalFields" type="Fields" />
+			<xs:element minOccurs="0" maxOccurs="1" name="GenerateController" type="GenerateController" />
+			<xs:element minOccurs="0" maxOccurs="1" name="GenerateEntityGetterService" type="GenerateEntityGetterService" />
+			<xs:element minOccurs="0" maxOccurs="1" name="AdditionalUsings" type="AdditionalUsings" />
+			<xs:element minOccurs="0" maxOccurs="1" name="CustomAttributes" type="CustomAttributes" />
+		</xs:sequence>
+		<xs:attribute default="" name="DatabaseEntityName" type="xs:string" />
+	</xs:complexType>
+	<xs:complexType name="GenerateEntityGetterService">
+		<xs:sequence>
+			<xs:element minOccurs="0" maxOccurs="1" name="AdditionalUsings" type="AdditionalUsings" />
+			<xs:element minOccurs="0" maxOccurs="1" name="CustomAttributes" type="CustomAttributes" />
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="GenerateEntitiesGetterRequest">
+		<xs:sequence>
+			<xs:element minOccurs="0" maxOccurs="1" name="RequestFields" type="Fields" />
+			<xs:element minOccurs="0" maxOccurs="1" name="GenerateController" type="GenerateController" />
+			<xs:element minOccurs="0" maxOccurs="1" name="GenerateEntitiesGetterService" type="GenerateEntitiesGetterService" />
+			<xs:element minOccurs="0" maxOccurs="1" name="AdditionalUsings" type="AdditionalUsings" />
+			<xs:element minOccurs="0" maxOccurs="1" name="CustomAttributes" type="CustomAttributes" />
+		</xs:sequence>
+		<xs:attribute default="" name="DatabaseEntityName" type="xs:string" />
+	</xs:complexType>
+	<xs:complexType name="GenerateEntitiesGetterService">
+		<xs:sequence>
+			<xs:element minOccurs="0" maxOccurs="1" name="AdditionalUsings" type="AdditionalUsings" />
+			<xs:element minOccurs="0" maxOccurs="1" name="CustomAttributes" type="CustomAttributes" />
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="Summary">
+		<xs:sequence>
+			<xs:element minOccurs="0" maxOccurs="1" name="SummaryFields" type="Fields" />
+			<xs:element minOccurs="0" maxOccurs="unbounded" name="GenerateAutoMapper" type="GenerateAutoMapper" />
+			<xs:element minOccurs="0" maxOccurs="1" name="GenerateSummariesGetterRequest" type="GenerateSummariesGetterRequest" />
+			<xs:element minOccurs="0" maxOccurs="1" name="AdditionalUsings" type="AdditionalUsings" />
+			<xs:element minOccurs="0" maxOccurs="1" name="CustomAttributes" type="CustomAttributes" />
+		</xs:sequence>
+		<xs:attribute name="Name" type="xs:string" />
+		<xs:attribute name="PluralName" type="xs:string" />
+		<xs:attribute default="Both" name="Location" type="Location" />
+		<xs:attribute default="false" name="IncludeAuditLog" type="xs:boolean" />
+		<xs:attribute default="false" name="IncludeRowVersionControl" type="xs:boolean" />
+		<xs:attribute name="DatabaseEntityName" type="xs:string" />
+	</xs:complexType>
+	<xs:complexType name="GenerateSummariesGetterRequest">
+		<xs:sequence>
+			<xs:element minOccurs="0" maxOccurs="1" name="RequestFields" type="Fields" />
+			<xs:element minOccurs="0" maxOccurs="1" name="GenerateController" type="GenerateController" />
+			<xs:element minOccurs="0" maxOccurs="1" name="GenerateSummariesGetterService" type="GenerateSummariesGetterService" />
+			<xs:element minOccurs="0" maxOccurs="1" name="AdditionalUsings" type="AdditionalUsings" />
+			<xs:element minOccurs="0" maxOccurs="1" name="CustomAttributes" type="CustomAttributes" />
+		</xs:sequence>
+		<xs:attribute default="" name="DatabaseEntityName" type="xs:string" />
+	</xs:complexType>
+	<xs:complexType name="GenerateSummariesGetterService">
+		<xs:sequence>
+			<xs:element minOccurs="0" maxOccurs="1" name="AdditionalUsings" type="AdditionalUsings" />
+			<xs:element minOccurs="0" maxOccurs="1" name="CustomAttributes" type="CustomAttributes" />
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="Enum">
+		<xs:sequence>
+			<xs:element minOccurs="0" maxOccurs="unbounded" name="EnumValue" type="EnumValue" />
+			<xs:element minOccurs="0" maxOccurs="1" name="CustomAttributes" type="CustomAttributes" />
+		</xs:sequence>
+		<xs:attribute name="Name" type="xs:string" />
+		<xs:attribute default="Both" name="Location" type="Location" />
+		<xs:attribute default="false" name="AutoGenSequenceNumber" type="xs:boolean" />
+	</xs:complexType>
+	<xs:complexType name="EnumValue">
+		<xs:attribute name="Name" type="xs:string" />
+		<xs:attribute default="Both" name="Location" type="Location" />
+		<xs:attribute default="" name="DefaultValue" type="xs:string" />
+	</xs:complexType>
+	<xs:complexType name="CustomRequest">
+		<xs:sequence>
+			<xs:element minOccurs="0" maxOccurs="1" name="RequestFields" type="Fields" />
+			<xs:element minOccurs="0" maxOccurs="1" name="AdditionalUsings" type="AdditionalUsings" />
+			<xs:element minOccurs="0" maxOccurs="1" name="CustomAttributes" type="CustomAttributes" />
+		</xs:sequence>
+		<xs:attribute name="Name" type="xs:string" />
+		<xs:attribute default="Both" name="Location" type="Location" />
+	</xs:complexType>
+	<xs:complexType name="CustomResponse">
+		<xs:sequence>
+			<xs:element minOccurs="0" maxOccurs="1" name="ResponseFields" type="Fields" />
+			<xs:element minOccurs="0" maxOccurs="1" name="AdditionalUsings" type="AdditionalUsings" />
+			<xs:element minOccurs="0" maxOccurs="1" name="CustomAttributes" type="CustomAttributes" />
+		</xs:sequence>
+		<xs:attribute name="Name" type="xs:string" />
+		<xs:attribute default="Both" name="Location" type="Location" />
+	</xs:complexType>
+</xs:schema>

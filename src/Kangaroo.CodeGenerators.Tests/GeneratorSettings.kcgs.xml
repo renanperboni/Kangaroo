@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<CodeGeneratorSettings xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+					   xsi:noNamespaceSchemaLocation="../Kangaroo.CodeGenerators/Structure/CodeGeneratorSettingsSchema.xsd">
+	<DatabaseRepositoriesSettings 
+		DatabaseEntitiesNamespace="Kangaroo.CodeGenerators.DatabaseRepositories.Tests.DatabaseEntities"
+		DbContextNamespace="Kangaroo.CodeGenerators.DatabaseRepositories.Tests.DBContexts"
+		DatabaseEntityTypeConfigurationNamespace="Kangaroo.CodeGenerators.DatabaseRepositories.Tests.EntityTypeConfiguration"
+		IdentityDbContextCustomUserClass="ApplicationUser"/>
+</CodeGeneratorSettings>

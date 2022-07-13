@@ -1,0 +1,53 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+	<xs:element name="CodeGeneratorSettings" nillable="true" type="CodeGeneratorSettings" />
+	<xs:complexType name="CodeGeneratorSettings">
+		<xs:sequence>
+			<xs:element minOccurs="0" maxOccurs="1" name="EnumsSettings" type="EnumsSettings" />
+			<xs:element minOccurs="0" maxOccurs="1" name="BackendEntititesSettings" type="BackendEntititesSettings" />
+			<xs:element minOccurs="0" maxOccurs="1" name="FrontendEntititesSettings" type="FrontendEntititesSettings" />
+			<xs:element minOccurs="0" maxOccurs="1" name="DatabaseRepositoriesSettings" type="DatabaseRepositoriesSettings" />
+			<xs:element minOccurs="0" maxOccurs="1" name="ServicesSettings" type="ServicesSettings" />
+			<xs:element minOccurs="0" maxOccurs="1" name="APISettings" type="APISettings" />
+			<xs:element minOccurs="0" maxOccurs="1" name="APIClientSettings" type="APIClientSettings" />
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="EnumsSettings">
+		<xs:attribute name="EnumsNamespace" type="xs:string" />
+	</xs:complexType>
+	<xs:complexType name="BackendEntititesSettings">
+		<xs:attribute name="EntitiesNamespace" type="xs:string" />
+	</xs:complexType>
+	<xs:complexType name="FrontendEntititesSettings">
+		<xs:attribute name="EntitiesNamespace" type="xs:string" />
+		<xs:attribute default="true" name="GenerateNotifyPropertyChanges" type="xs:boolean" />
+	</xs:complexType>
+	<xs:complexType name="DatabaseRepositoriesSettings">
+		<xs:attribute name="EntitiesNamespace" type="xs:string" />
+		<xs:attribute name="DatabaseEntitiesNamespace" type="xs:string" />
+		<xs:attribute name="DatabaseEntityTypeConfigurationNamespace" type="xs:string" />
+		<xs:attribute name="DbContextNamespace" type="xs:string" />
+		<xs:attribute name="DatabaseRepositoriesNamespace" type="xs:string" />
+		<xs:attribute name="DatabaseEntityMapperNamespace" type="xs:string" />
+		<xs:attribute default="Tb" name="DatabaseEntityPrefix" type="xs:string" />
+		<xs:attribute default="true" name="GenerateDatabaseEntity" type="xs:boolean" />
+		<xs:attribute default="true" name="GenerateDatabaseEntityTypeConfiguration" type="xs:boolean" />
+		<xs:attribute default="true" name="GenerateDbContext" type="xs:boolean" />
+		<xs:attribute default="true" name="UseIdentityDbContext" type="xs:boolean" />
+		<xs:attribute name="IdentityDbContextCustomUserClass" type="xs:string" />
+		<xs:attribute default="true" name="GenerateDatabaseEntityMapper" type="xs:boolean" />
+	</xs:complexType>
+	<xs:complexType name="ServicesSettings">
+		<xs:attribute name="DatabaseEntitiesNamespace" type="xs:string" />
+		<xs:attribute name="DatabaseRepositoriesNamespace" type="xs:string" />
+		<xs:attribute name="ServicesNamespace" type="xs:string" />
+		<xs:attribute default="Tb" name="DatabaseEntityPrefix" type="xs:string" />
+	</xs:complexType>
+	<xs:complexType name="APISettings">
+		<xs:attribute name="ControllersNamespace" type="xs:string" />
+		<xs:attribute name="ServicesNamespace" type="xs:string" />
+	</xs:complexType>
+	<xs:complexType name="APIClientSettings">
+		<xs:attribute name="APIClientNamespace" type="xs:string" />
+	</xs:complexType>
+</xs:schema>

@@ -1,0 +1,44 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<CodeGenerator xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		 xsi:noNamespaceSchemaLocation="../Kangaroo.CodeGenerators/Structure/CodeGeneratorSchema.xsd">
+	<Entity Name="Country" PluralName="Countries">
+		<EntityFields>
+			<KeyField KeyType="Int" Name="CountryId"/>
+			<StringField Name="Name"/>
+			<StringField Name="IBGECode"/>
+		</EntityFields>
+		
+		<GenerateDatabaseEntity>
+			<GenerateDatabaseEntityConfiguration />
+		</GenerateDatabaseEntity>
+
+		<GenerateAutoMapper/>
+
+		<GenerateEntityHandlerRequest>
+			<GenerateController>
+				<Permissions>
+					<Permission Name="Per_General_Handler_Country"/>
+				</Permissions>
+			</GenerateController>
+			<GenerateEntityHandlerService />
+		</GenerateEntityHandlerRequest>
+		
+		<GenerateEntityGetterRequest>
+			<GenerateController>
+				<Permissions>
+					<Permission Name="Per_General_Get_Country"/>
+				</Permissions>
+			</GenerateController>
+			<GenerateEntityGetterService />
+		</GenerateEntityGetterRequest>
+		
+		<GenerateEntitiesGetterRequest>
+			<GenerateController>
+				<Permissions>
+					<Permission Name="Per_General_Get_Countries"/>
+				</Permissions>
+			</GenerateController>
+			<GenerateEntitiesGetterService />
+		</GenerateEntitiesGetterRequest>
+	</Entity>
+</CodeGenerator>
