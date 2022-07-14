@@ -1,5 +1,4 @@
-﻿// Licensed to Kangaroo under one or more agreements.
-// We license this file to you under the MIT license.
+﻿// This file is licensed to you under the MIT license.
 // See the LICENSE file in the project root for full license information.
 
 namespace Kangaroo.CodeGenerators.CodeWriters
@@ -94,14 +93,20 @@ namespace Kangaroo.CodeGenerators.CodeWriters
             fileWriter.WriteUsing("Kangaroo.Models");
             fileWriter.WriteUsing("Kangaroo.Models.DatabaseEntities");
 
-            foreach (var customUsing in entity.GenerateDatabaseEntity?.AdditionalUsings?.Using)
+            if (entity.GenerateDatabaseEntity?.AdditionalUsings?.Using != null)
             {
-                fileWriter.WriteUsing(customUsing.Content);
+                foreach (var customUsing in entity.GenerateDatabaseEntity.AdditionalUsings.Using)
+                {
+                    fileWriter.WriteUsing(customUsing.Content);
+                }
             }
 
-            foreach (var classAttribute in entity.GenerateDatabaseEntity?.CustomAttributes.CustomAttribute)
+            if (entity.GenerateDatabaseEntity?.CustomAttributes?.CustomAttribute != null)
             {
-                fileWriter.WriteClassAttribute(classAttribute.Attribute);
+                foreach (var classAttribute in entity.GenerateDatabaseEntity?.CustomAttributes.CustomAttribute)
+                {
+                    fileWriter.WriteClassAttribute(classAttribute.Attribute);
+                }
             }
 
             entity.EntityFields?.HandleFields(WriteField(codeGeneratorSettings, fileWriter, entity));
@@ -192,9 +197,12 @@ namespace Kangaroo.CodeGenerators.CodeWriters
 
                         var attributes = new List<string>();
 
-                        foreach (var attribute in field.CustomAttributes?.CustomAttribute)
+                        if (field.CustomAttributes?.CustomAttribute != null)
                         {
-                            attributes.Add(attribute.Attribute);
+                            foreach (var attribute in field.CustomAttributes?.CustomAttribute)
+                            {
+                                attributes.Add(attribute.Attribute);
+                            }
                         }
 
                         if (field is KeyField)
@@ -245,28 +253,40 @@ namespace Kangaroo.CodeGenerators.CodeWriters
             configurationfileWriter.WriteUsing("Microsoft.EntityFrameworkCore.Metadata.Builders");
             configurationfileWriter.WriteUsing(codeGeneratorSettings.DatabaseRepositoriesSettings?.DatabaseEntitiesNamespace);
 
-            foreach (var customUsing in entity.GenerateDatabaseEntity?.GenerateDatabaseEntityConfiguration?.AdditionalUsings?.Using)
+            if (entity.GenerateDatabaseEntity?.GenerateDatabaseEntityConfiguration?.AdditionalUsings?.Using != null)
             {
-                configurationfileWriter.WriteUsing(customUsing.Content);
+                foreach (var customUsing in entity.GenerateDatabaseEntity.GenerateDatabaseEntityConfiguration.AdditionalUsings.Using)
+                {
+                    configurationfileWriter.WriteUsing(customUsing.Content);
+                }
             }
 
-            foreach (var customAttribute in entity.GenerateDatabaseEntity?.GenerateDatabaseEntityConfiguration?.CustomAttributes?.CustomAttribute)
+            if (entity.GenerateDatabaseEntity?.GenerateDatabaseEntityConfiguration?.CustomAttributes?.CustomAttribute != null)
             {
-                configurationfileWriter.WriteClassAttribute(customAttribute.Attribute);
+                foreach (var customAttribute in entity.GenerateDatabaseEntity?.GenerateDatabaseEntityConfiguration?.CustomAttributes?.CustomAttribute)
+                {
+                    configurationfileWriter.WriteClassAttribute(customAttribute.Attribute);
+                }
             }
 
             List<string> configureMethodBodyLines = new List<string>();
 
-            foreach (var indexedField in entity.GenerateDatabaseEntity?.GenerateDatabaseEntityConfiguration?.Indexes?.IndexField)
+            if (entity.GenerateDatabaseEntity?.GenerateDatabaseEntityConfiguration?.Indexes?.IndexField != null)
             {
-                configureMethodBodyLines.Add($"builder.HasIndex(x => x.{indexedField.FieldName});");
+                foreach (var indexedField in entity.GenerateDatabaseEntity.GenerateDatabaseEntityConfiguration.Indexes.IndexField)
+                {
+                    configureMethodBodyLines.Add($"builder.HasIndex(x => x.{indexedField.FieldName});");
+                }
             }
 
-            foreach (var precisionField in entity.EntityFields?.DecimalField)
+            if (entity.EntityFields?.DecimalField != null)
             {
-                if (!entity.GenerateDatabaseEntity?.IgnoreFields?.IgnoreField.Any(x => x.Name == precisionField.Name) == true)
+                foreach (var precisionField in entity.EntityFields.DecimalField)
                 {
-                    configureMethodBodyLines.Add($"builder.Property(x => x.{precisionField.Name}).HasPrecision({precisionField.Precision}, {precisionField.Scale});");
+                    if (!entity.GenerateDatabaseEntity?.IgnoreFields?.IgnoreField.Any(x => x.Name == precisionField.Name) == true)
+                    {
+                        configureMethodBodyLines.Add($"builder.Property(x => x.{precisionField.Name}).HasPrecision({precisionField.Precision}, {precisionField.Scale});");
+                    }
                 }
             }
 
@@ -327,25 +347,25 @@ namespace Kangaroo.CodeGenerators.CodeWriters
 
         private static void WriteDatabaseRepository(CodeGeneratorSettings codeGeneratorSettings, SourceProductionContext sourceProductionContext)
         {
-            var interfaceName = "IDatabaseRepository";
+            var interfaceName = "IApplicationDatabaseRepository";
             var interfaceRepositoryFileWriter = new CSFileWriter(
                         CSFileWriterType.Interface,
                         codeGeneratorSettings.DatabaseRepositoriesSettings?.DatabaseRepositoriesNamespace,
                         interfaceName,
                         isPartial: true,
-                        inheritance: "IRepository<ApplicationDbContext>");
+                        inheritance: "IDatabaseRepository<ApplicationDbContext>");
             interfaceRepositoryFileWriter.WriteUsing("AutoMapper");
             interfaceRepositoryFileWriter.WriteUsing("Kangaroo.Infrastructure.DatabaseRepositories");
             interfaceRepositoryFileWriter.WriteUsing(codeGeneratorSettings.DatabaseRepositoriesSettings?.DbContextNamespace);
             sourceProductionContext.WriteNewCSFile(interfaceName, interfaceRepositoryFileWriter);
 
-            var databaseRepositoryClassName = "DatabaseRepository";
+            var databaseRepositoryClassName = "ApplicationDatabaseRepository";
             var databaseRepositoryFileWriter = new CSFileWriter(
                         CSFileWriterType.Class,
                         codeGeneratorSettings.DatabaseRepositoriesSettings?.DatabaseRepositoriesNamespace,
                         databaseRepositoryClassName,
                         isPartial: true,
-                        inheritance: "Repository<ApplicationDbContext>, IDatabaseEntityRepository");
+                        inheritance: "DatabaseRepository<ApplicationDbContext>, IApplicationDatabaseRepository");
 
             databaseRepositoryFileWriter.WriteUsing("AutoMapper");
             databaseRepositoryFileWriter.WriteUsing("Kangaroo.Infrastructure.DatabaseRepositories");
@@ -389,22 +409,25 @@ namespace Kangaroo.CodeGenerators.CodeWriters
             {
                 foreach (var autoMapper in autoMapperList)
                 {
-                    var databaseEntityName = autoMapper.DatabaseEntityName ?? defaultDatabaseName;
+                    var databaseEntityName = string.IsNullOrEmpty(autoMapper.DatabaseEntityName) ? defaultDatabaseName : autoMapper.DatabaseEntityName;
                     var source = autoMapper.AutoMapperSourceType == AutoMapperSourceType.Entity ? entityName : databaseEntityName;
-                    var destination = autoMapper.AutoMapperSourceType == AutoMapperSourceType.Entity ? entityName : databaseEntityName;
+                    var destination = autoMapper.AutoMapperSourceType != AutoMapperSourceType.Entity ? entityName : databaseEntityName;
 
                     var ignoreFieldCount = autoMapper.IgnoreFields?.IgnoreField.Count() ?? 0;
 
                     applicationAutoMapperProfileFileWriter.WriteConstructorAdditionalBodyLine($"this.OnMappingExpression(CreateMap<{source}, {destination}>()" +
                         (ignoreFieldCount == 0 ? ");" : string.Empty));
 
-                    foreach (var ignoreField in autoMapper.IgnoreFields?.IgnoreField)
+                    if (autoMapper.IgnoreFields?.IgnoreField != null)
                     {
-                        ignoreFieldCount--;
+                        foreach (var ignoreField in autoMapper.IgnoreFields.IgnoreField)
+                        {
+                            ignoreFieldCount--;
 
-                        applicationAutoMapperProfileFileWriter.WriteConstructorAdditionalBodyLine(
-                            applicationAutoMapperProfileFileWriter.GetWhiteSpace() + $".ForMember(x => x.{ignoreField.Name}, x => x.Ignore())" +
-                            (ignoreFieldCount == 0 ? ");" : string.Empty));
+                            applicationAutoMapperProfileFileWriter.WriteConstructorAdditionalBodyLine(
+                                applicationAutoMapperProfileFileWriter.GetWhiteSpace() + $".ForMember(x => x.{ignoreField.Name}, x => x.Ignore())" +
+                                (ignoreFieldCount == 0 ? ");" : string.Empty));
+                        }
                     }
 
                     applicationAutoMapperProfileFileWriter.WriteMethod("OnMappingExpression", parameters: $"IMappingExpression<{source}, {destination}> mappingExpression", isPartial: true);

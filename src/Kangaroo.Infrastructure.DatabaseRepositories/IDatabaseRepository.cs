@@ -1,14 +1,13 @@
-﻿// Licensed to Kangaroo under one or more agreements.
-// We license this file to you under the MIT license.
+﻿// This file is licensed to you under the MIT license.
 // See the LICENSE file in the project root for full license information.
 
 namespace Kangaroo.Infrastructure.DatabaseRepositories
 {
     using Kangaroo.Models.DatabaseEntities;
-    using Kangaroo.Models.Entitites;
+    using Kangaroo.Models.Entities;
     using Microsoft.EntityFrameworkCore;
 
-    public interface IRepository<TDbContext>
+    public interface IDatabaseRepository<TDbContext>
         where TDbContext : DbContext
     {
         public TDatabaseEntity ApplyChanges<TDatabaseEntity, TEntity>(TEntity entity)

@@ -1,5 +1,4 @@
-﻿// Licensed to Kangaroo under one or more agreements.
-// We license this file to you under the MIT license.
+﻿// This file is licensed to you under the MIT license.
 // See the LICENSE file in the project root for full license information.
 
 namespace Kangaroo.CodeGenerators.CodeWriters
@@ -67,12 +66,12 @@ namespace Kangaroo.CodeGenerators.CodeWriters
                 WriteRequestResponse(
                     codeGeneratorSettings,
                     sourceProductionContext,
-                    entityName: entity.Name,
                     className: $"{entity.Name}HandlerRequest",
                     inheritance: $"IEntityHandlerRequest<{entity.Name}>",
                     entityPropertyType: entity.Name,
                     entityPropertyName: "Entity",
                     entityPropertyValue: string.Empty,
+                    entityPropertyHasValidator: true,
                     additionalUsings: entity.GenerateEntityHandlerRequest.AdditionalUsings,
                     customAttributes: entity.GenerateEntityHandlerRequest.CustomAttributes,
                     fields: entity.GenerateEntityHandlerRequest.AdditionalFields,
@@ -81,12 +80,12 @@ namespace Kangaroo.CodeGenerators.CodeWriters
                 WriteRequestResponse(
                     codeGeneratorSettings,
                     sourceProductionContext,
-                    entityName: entity.Name,
                     className: $"{entity.Name}HandlerResponse",
                     inheritance: $"IEntityHandlerResponse<{entity.Name}>",
                     entityPropertyType: entity.Name,
                     entityPropertyName: "Entity",
                     entityPropertyValue: string.Empty,
+                    entityPropertyHasValidator: false,
                     additionalUsings: entity.GenerateEntityHandlerRequest.AdditionalUsings,
                     customAttributes: entity.GenerateEntityHandlerRequest.CustomAttributes,
                     fields: null,
@@ -120,12 +119,12 @@ namespace Kangaroo.CodeGenerators.CodeWriters
                 WriteRequestResponse(
                     codeGeneratorSettings,
                     sourceProductionContext,
-                    entityName: entity.Name,
                     className: $"{entity.Name}GetterRequest",
                     inheritance: entityGetterRequestInheritance,
                     entityPropertyType: string.Empty,
                     entityPropertyName: string.Empty,
                     entityPropertyValue: string.Empty,
+                    entityPropertyHasValidator: true,
                     additionalUsings: entity.GenerateEntityGetterRequest.AdditionalUsings,
                     customAttributes: entity.GenerateEntityGetterRequest.CustomAttributes,
                     fields: entityGetterRequestFields,
@@ -134,12 +133,12 @@ namespace Kangaroo.CodeGenerators.CodeWriters
                 WriteRequestResponse(
                     codeGeneratorSettings,
                     sourceProductionContext,
-                    entityName: entity.Name,
                     className: $"{entity.Name}GetterResponse",
                     inheritance: $"IEntityGetterResponse<{entity.Name}>",
                     entityPropertyType: entity.Name,
                     entityPropertyName: "Entity",
                     entityPropertyValue: string.Empty,
+                    entityPropertyHasValidator: false,
                     additionalUsings: entity.GenerateEntityGetterRequest.AdditionalUsings,
                     customAttributes: entity.GenerateEntityGetterRequest.CustomAttributes,
                     fields: null,
@@ -151,12 +150,12 @@ namespace Kangaroo.CodeGenerators.CodeWriters
                 WriteRequestResponse(
                     codeGeneratorSettings,
                     sourceProductionContext,
-                    entityName: entity.Name,
                     className: $"{entity.PluralName}GetterRequest",
                     inheritance: "IEntitiesGetterRequest",
                     entityPropertyType: string.Empty,
                     entityPropertyName: string.Empty,
                     entityPropertyValue: string.Empty,
+                    entityPropertyHasValidator: false,
                     additionalUsings: entity.GenerateEntityGetterRequest.AdditionalUsings,
                     customAttributes: entity.GenerateEntityGetterRequest.CustomAttributes,
                     fields: entity.GenerateEntityGetterRequest.AdditionalFields,
@@ -165,12 +164,12 @@ namespace Kangaroo.CodeGenerators.CodeWriters
                 WriteRequestResponse(
                     codeGeneratorSettings,
                     sourceProductionContext,
-                    entityName: entity.Name,
-                    className: $"{entity.Name}GetterResponse",
+                    className: $"{entity.PluralName}GetterResponse",
                     inheritance: $"IEntitiesGetterResponse<{entity.Name}>",
                     entityPropertyType: $"IList<{entity.Name}>",
                     entityPropertyName: "Entities",
                     entityPropertyValue: $"new List<{entity.Name}>()",
+                    entityPropertyHasValidator: false,
                     additionalUsings: entity.GenerateEntityGetterRequest.AdditionalUsings,
                     customAttributes: entity.GenerateEntityGetterRequest.CustomAttributes,
                     fields: null,
@@ -198,12 +197,12 @@ namespace Kangaroo.CodeGenerators.CodeWriters
                 WriteRequestResponse(
                     codeGeneratorSettings,
                     sourceProductionContext,
-                    entityName: summary.Name,
                     className: $"{summary.PluralName}GetterRequest",
                     inheritance: "ISummariesGetterRequest",
                     entityPropertyType: string.Empty,
                     entityPropertyName: string.Empty,
                     entityPropertyValue: string.Empty,
+                    entityPropertyHasValidator: false,
                     additionalUsings: summary.GenerateSummariesGetterRequest.AdditionalUsings,
                     customAttributes: summary.GenerateSummariesGetterRequest.CustomAttributes,
                     fields: summary.GenerateSummariesGetterRequest.RequestFields,
@@ -212,12 +211,12 @@ namespace Kangaroo.CodeGenerators.CodeWriters
                 WriteRequestResponse(
                     codeGeneratorSettings,
                     sourceProductionContext,
-                    entityName: summary.Name,
                     className: $"{summary.PluralName}GetterResponse",
                     inheritance: $"ISummariesGetterResponse<{summary.Name}>",
                     entityPropertyType: $"IList<{summary.Name}>",
                     entityPropertyName: "Summaries",
                     entityPropertyValue: $"new List<{summary.Name}>()",
+                    entityPropertyHasValidator: false,
                     additionalUsings: summary.GenerateSummariesGetterRequest.AdditionalUsings,
                     customAttributes: summary.GenerateSummariesGetterRequest.CustomAttributes,
                     fields: null,
@@ -242,6 +241,7 @@ namespace Kangaroo.CodeGenerators.CodeWriters
             var keyField = fields?.KeyField;
             var keyType = keyField?.KeyType;
             var entityNamespace = isBackend ? codeGeneratorSettings.BackendEntititesSettings?.EntitiesNamespace : codeGeneratorSettings.FrontendEntititesSettings?.EntitiesNamespace;
+            var entityValidatorNamespace = isBackend ? codeGeneratorSettings.BackendEntititesSettings?.ValidatorsNamespace : codeGeneratorSettings.FrontendEntititesSettings?.ValidatorsNamespace;
             var shouldGenerateNotifyPropertyChanges = isBackend ? false : codeGeneratorSettings.FrontendEntititesSettings?.GenerateNotifyPropertyChanges ?? false;
 
             var inheritance = defaultInheritance;
@@ -276,62 +276,84 @@ namespace Kangaroo.CodeGenerators.CodeWriters
                 inheritance += ", IHasAuditLog";
             }
 
-            var fileWriter = new CSFileWriter(
+            var entityFileWriter = new CSFileWriter(
                     CSFileWriterType.Class,
                     entityNamespace,
                     entityName,
                     isPartial: true,
                     inheritance: inheritance);
 
-            fileWriter.WriteUsing("System");
-            fileWriter.WriteUsing("Kangaroo.Models");
-            fileWriter.WriteUsing("Kangaroo.Models.Entities");
+            entityFileWriter.WriteUsing("System");
+            entityFileWriter.WriteUsing("Kangaroo.Models");
+            entityFileWriter.WriteUsing("Kangaroo.Models.Entities");
 
-            foreach (var customUsing in additionalUsings?.Using)
+            var validatorClassName = $"{entityName}Validator";
+            var entityValidatorFileWriter = new CSFileWriter(
+                    CSFileWriterType.Class,
+                    entityValidatorNamespace,
+                    validatorClassName,
+                    isPartial: true,
+                    inheritance: $"AbstractValidator<{entityName}>");
+
+            entityValidatorFileWriter.WriteUsing("System");
+            entityValidatorFileWriter.WriteUsing("FluentValidation");
+            entityValidatorFileWriter.WriteUsing("Kangaroo.Models.Entities");
+            entityValidatorFileWriter.WriteUsing(entityNamespace);
+
+            entityValidatorFileWriter.WriteMethod("SetCustomRules", isPartial: true);
+
+            if (additionalUsings?.Using != null)
             {
-                fileWriter.WriteUsing(customUsing.Content);
+                foreach (var customUsing in additionalUsings.Using)
+                {
+                    entityFileWriter.WriteUsing(customUsing.Content);
+                }
             }
 
-            foreach (var classAttribute in customAttributes.CustomAttribute)
+            if (customAttributes?.CustomAttribute != null)
             {
-                fileWriter.WriteClassAttribute(classAttribute.Attribute);
+                foreach (var classAttribute in customAttributes.CustomAttribute)
+                {
+                    entityFileWriter.WriteClassAttribute(classAttribute.Attribute);
+                }
             }
 
-            fields?.HandleFields(WriteField(fileWriter, shouldGenerateNotifyPropertyChanges, currentLocation));
+            fields?.HandleFields(WriteField(entityFileWriter, entityValidatorFileWriter, shouldGenerateNotifyPropertyChanges, currentLocation));
 
             if (includeRowVersionControl)
             {
-                fileWriter.WriteProperty("byte[]", "RowVersion", isFullProperty: shouldGenerateNotifyPropertyChanges, isVirtual: false, attributes: new List<string>() { "Timestamp" });
+                entityFileWriter.WriteProperty("byte[]", "RowVersion", isFullProperty: shouldGenerateNotifyPropertyChanges, isVirtual: false);
             }
 
             if (includeAuditLog)
             {
-                fileWriter.WriteProperty("string", "CreatedByUserName", isFullProperty: shouldGenerateNotifyPropertyChanges, isVirtual: false, attributes: new List<string>() { "Required", "MaxLength(510)" });
-                fileWriter.WriteProperty("DateTimeOffset", "CreatedAt", isFullProperty: shouldGenerateNotifyPropertyChanges, isVirtual: false, attributes: new List<string>() { "Required", "MaxLength(510)" });
+                entityFileWriter.WriteProperty("string", "CreatedByUserName", isFullProperty: shouldGenerateNotifyPropertyChanges, isVirtual: false);
+                entityFileWriter.WriteProperty("DateTimeOffset", "CreatedAt", isFullProperty: shouldGenerateNotifyPropertyChanges, isVirtual: false);
 
-                fileWriter.WriteProperty("string", "UpdatedByUserName", isFullProperty: shouldGenerateNotifyPropertyChanges, isVirtual: false, attributes: new List<string>() { "MaxLength(510)" });
-                fileWriter.WriteProperty("DateTimeOffset?", "UpdatedAt", isFullProperty: shouldGenerateNotifyPropertyChanges, isVirtual: false);
+                entityFileWriter.WriteProperty("string", "UpdatedByUserName", isFullProperty: shouldGenerateNotifyPropertyChanges, isVirtual: false);
+                entityFileWriter.WriteProperty("DateTimeOffset?", "UpdatedAt", isFullProperty: shouldGenerateNotifyPropertyChanges, isVirtual: false);
             }
 
             if (includeDataState)
             {
-                fileWriter.WriteProperty("DataState", "DataState", isFullProperty: shouldGenerateNotifyPropertyChanges, isVirtual: false, attributes: new List<string>() { "NotMapped" });
+                entityFileWriter.WriteProperty("DataState", "DataState", isFullProperty: shouldGenerateNotifyPropertyChanges, isVirtual: false);
             }
 
-            WriteKeyField(keyField, fileWriter, currentLocation);
+            WriteKeyField(keyField, entityFileWriter, currentLocation);
 
-            sourceProductionContext.WriteNewCSFile(entityName, fileWriter);
+            sourceProductionContext.WriteNewCSFile(entityName, entityFileWriter);
+            sourceProductionContext.WriteNewCSFile(validatorClassName, entityValidatorFileWriter);
         }
 
         private static void WriteRequestResponse(
             CodeGeneratorSettings codeGeneratorSettings,
             SourceProductionContext sourceProductionContext,
-            string entityName,
             string className,
             string inheritance,
             string entityPropertyType,
             string entityPropertyName,
             string entityPropertyValue,
+            bool entityPropertyHasValidator,
             AdditionalUsings additionalUsings,
             CustomAttributes customAttributes,
             Fields fields,
@@ -339,12 +361,13 @@ namespace Kangaroo.CodeGenerators.CodeWriters
         {
             var currentLocation = isBackend ? Structure.Location.Backend : Structure.Location.Frontend;
             var classNamespace = isBackend ? codeGeneratorSettings.BackendEntititesSettings?.EntitiesNamespace : codeGeneratorSettings.FrontendEntititesSettings?.EntitiesNamespace;
+            var validatorNamespace = isBackend ? codeGeneratorSettings.BackendEntititesSettings?.ValidatorsNamespace : codeGeneratorSettings.FrontendEntititesSettings?.ValidatorsNamespace;
             var shouldGenerateNotifyPropertyChanges = isBackend ? false : codeGeneratorSettings.FrontendEntititesSettings?.GenerateNotifyPropertyChanges ?? false;
 
             var fileWriter = new CSFileWriter(
                     CSFileWriterType.Class,
                     classNamespace,
-                    entityName,
+                    className,
                     isPartial: true,
                     inheritance: inheritance);
 
@@ -352,26 +375,53 @@ namespace Kangaroo.CodeGenerators.CodeWriters
             fileWriter.WriteUsing("Kangaroo.Models");
             fileWriter.WriteUsing("Kangaroo.Models.Entities");
 
-            foreach (var customUsing in additionalUsings?.Using)
+            var validatorClassName = $"{className}Validator";
+            var validatorFileWriter = new CSFileWriter(
+                    CSFileWriterType.Class,
+                    validatorNamespace,
+                    validatorClassName,
+                    isPartial: true,
+                    inheritance: $"AbstractValidator<{className}>");
+
+            validatorFileWriter.WriteUsing("System");
+            validatorFileWriter.WriteUsing("FluentValidation");
+            validatorFileWriter.WriteUsing("Kangaroo.Models.Entities");
+            validatorFileWriter.WriteUsing(classNamespace);
+
+            validatorFileWriter.WriteMethod("SetCustomRules", isPartial: true);
+
+            if (additionalUsings?.Using != null)
             {
-                fileWriter.WriteUsing(customUsing.Content);
+                foreach (var customUsing in additionalUsings.Using)
+                {
+                    fileWriter.WriteUsing(customUsing.Content);
+                }
             }
 
-            foreach (var classAttribute in customAttributes.CustomAttribute)
+            if (customAttributes?.CustomAttribute != null)
             {
-                fileWriter.WriteClassAttribute(classAttribute.Attribute);
+                foreach (var classAttribute in customAttributes.CustomAttribute)
+                {
+                    fileWriter.WriteClassAttribute(classAttribute.Attribute);
+                }
             }
 
             if (!string.IsNullOrEmpty(entityPropertyName))
             {
                 fileWriter.WriteProperty(type: entityPropertyType, name: entityPropertyName, value: entityPropertyValue, isFullProperty: shouldGenerateNotifyPropertyChanges);
+
+                if (entityPropertyHasValidator)
+                {
+                    validatorFileWriter.WriteConstructorAdditionalBodyLine($"this.RuleFor(x => x.{entityPropertyName}).NotNull().NotEmpty();");
+                }
             }
 
-            fields?.HandleFields(WriteField(fileWriter, shouldGenerateNotifyPropertyChanges, currentLocation));
+            fields?.HandleFields(WriteField(fileWriter, validatorFileWriter, shouldGenerateNotifyPropertyChanges, currentLocation));
 
             WriteKeyField(fields?.KeyField, fileWriter, currentLocation);
 
             sourceProductionContext.WriteNewCSFile(className, fileWriter);
+            sourceProductionContext.WriteNewCSFile(validatorClassName, validatorFileWriter);
         }
 
         private static void WriteKeyField(KeyField keyField, CSFileWriter fileWriter, Structure.Location location)
@@ -401,7 +451,7 @@ namespace Kangaroo.CodeGenerators.CodeWriters
             }
         }
 
-        private static Action<object> WriteField(CSFileWriter fileWriter, bool isFullProperty, Structure.Location location)
+        private static Action<object> WriteField(CSFileWriter fileWriter, CSFileWriter validatorFileWriter, bool isFullProperty, Structure.Location location)
         {
             return x =>
             {
@@ -422,11 +472,38 @@ namespace Kangaroo.CodeGenerators.CodeWriters
                         fieldValue = $"new List<{fieldType}>()";
                     }
 
+                    var isRequired = false;
+
+                    if (field is ICanBeRequired requiredField)
+                    {
+                        isRequired = requiredField.IsRequired;
+                    }
+
+                    var maxLength = 0;
+
+                    if (field is StringField stringField)
+                    {
+                        maxLength = stringField.MaxLength;
+                    }
+
+                    if (isRequired)
+                    {
+                        validatorFileWriter.WriteConstructorAdditionalBodyLine($"this.RuleFor(x => x.{field.Name}).NotNull().NotEmpty();");
+                    }
+
+                    if (maxLength > 0)
+                    {
+                        validatorFileWriter.WriteConstructorAdditionalBodyLine($"this.RuleFor(x => x.{field.Name}).MaximumLength({maxLength});");
+                    }
+
                     var attributes = new List<string>();
 
-                    foreach (var attribute in field.CustomAttributes?.CustomAttribute)
+                    if (field.CustomAttributes?.CustomAttribute != null)
                     {
-                        attributes.Add(attribute.Attribute);
+                        foreach (var attribute in field.CustomAttributes.CustomAttribute)
+                        {
+                            attributes.Add(attribute.Attribute);
+                        }
                     }
 
                     fileWriter.WriteProperty(fieldType, field.Name, value: fieldValue, isFullProperty: isFullProperty, attributes: attributes);

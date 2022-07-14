@@ -36,7 +36,7 @@
 
 	<ItemGroup>
 	  <ProjectReference Include="..\Kangaroo.Models.DatabaseEntities\Kangaroo.Models.DatabaseEntities.csproj" />
-	  <ProjectReference Include="..\Kangaroo.Models.Entitites\Kangaroo.Models.Entitites.csproj" />
+	  <ProjectReference Include="..\Kangaroo.Models.Entities\Kangaroo.Models.Entities.csproj" />
 	  <ProjectReference Include="..\Kangaroo.Models\Kangaroo.Models.csproj" />
 	</ItemGroup>
 

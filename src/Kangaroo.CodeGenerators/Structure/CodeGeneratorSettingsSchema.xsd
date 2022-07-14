@@ -17,9 +17,11 @@
 	</xs:complexType>
 	<xs:complexType name="BackendEntititesSettings">
 		<xs:attribute name="EntitiesNamespace" type="xs:string" />
+		<xs:attribute name="ValidatorsNamespace" type="xs:string" />
 	</xs:complexType>
 	<xs:complexType name="FrontendEntititesSettings">
 		<xs:attribute name="EntitiesNamespace" type="xs:string" />
+		<xs:attribute name="ValidatorsNamespace" type="xs:string" />
 		<xs:attribute default="true" name="GenerateNotifyPropertyChanges" type="xs:boolean" />
 	</xs:complexType>
 	<xs:complexType name="DatabaseRepositoriesSettings">

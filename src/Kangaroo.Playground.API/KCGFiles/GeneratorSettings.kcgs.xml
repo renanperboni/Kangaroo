@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<CodeGeneratorSettings xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+					   xsi:noNamespaceSchemaLocation="../../Kangaroo.CodeGenerators/Structure/CodeGeneratorSettingsSchema.xsd">
+	<BackendEntititesSettings 
+		EntitiesNamespace="Kangaroo.Playground.BackendEntities"
+		ValidatorsNamespace="Kangaroo.Playground.BackendEntities.Validators"/>
+	
+	<DatabaseRepositoriesSettings 
+		EntitiesNamespace="Kangaroo.Playground.BackendEntities"
+		DatabaseEntitiesNamespace="Kangaroo.Playground.DatabaseEntities"
+		DatabaseEntityTypeConfigurationNamespace="Kangaroo.Playground.DatabaseRepositories.EntityTypeConfiguration"
+		DbContextNamespace="Kangaroo.Playground.DatabaseRepositories.DBContexts"
+		DatabaseRepositoriesNamespace="Kangaroo.Playground.DatabaseRepositories"
+		DatabaseEntityMapperNamespace="Kangaroo.Playground.DatabaseRepositories.Mapper"
+		IdentityDbContextCustomUserClass="ApplicationUser"/>
+</CodeGeneratorSettings>

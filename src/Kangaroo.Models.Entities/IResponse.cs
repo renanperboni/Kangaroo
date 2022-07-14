@@ -1,17 +1,13 @@
 ﻿// This file is licensed to you under the MIT license.
 // See the LICENSE file in the project root for full license information.
 
-namespace Kangaroo.Models
+namespace Kangaroo.Models.Entities
 {
     using System;
     using System.Collections.Generic;
     using System.Text;
 
-    public enum DataState
+    public interface IResponse
     {
-        Unchanged = 0,
-        Inserted = 1,
-        Updated = 2,
-        Deleted = 3,
     }
 }

@@ -1,5 +1,4 @@
-﻿// Licensed to Kangaroo under one or more agreements.
-// We license this file to you under the MIT license.
+﻿// This file is licensed to you under the MIT license.
 // See the LICENSE file in the project root for full license information.
 
 namespace Kangaroo.CodeGenerators.Writers
@@ -384,6 +383,21 @@ namespace Kangaroo.CodeGenerators.Writers
                 {
                     stringBuilder.AppendLine($"{this.GetWhiteSpace(3)}this.{dependencyInjection.Name} = {dependencyInjection.Name};");
                 }
+
+                foreach (var constructorAdditionalBodyLine in this.constructorAdditionalBodyLines)
+                {
+                    stringBuilder.AppendLine(constructorAdditionalBodyLine);
+                }
+
+                stringBuilder.AppendLine(this.GetWhiteSpace(2) + @"}");
+
+                stringBuilder.AppendLine();
+            }
+            else if (this.constructorAdditionalBodyLines.Any())
+            {
+                stringBuilder.AppendLine($"{this.GetWhiteSpace(2)}public {this.name}()");
+
+                stringBuilder.AppendLine(this.GetWhiteSpace(2) + @"{");
 
                 foreach (var constructorAdditionalBodyLine in this.constructorAdditionalBodyLines)
                 {

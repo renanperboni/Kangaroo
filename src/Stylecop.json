@@ -3,8 +3,7 @@
   "settings": {
     "documentationRules": {
       "xmlHeader": false,
-      "companyName": "Kangaroo",
-      "copyrightText": "Licensed to {companyName} under one or more agreements.\nWe license this file to you under the MIT license.\nSee the LICENSE file in the project root for full license information.",
+      "copyrightText": "This file is licensed to you under the MIT license.\nSee the LICENSE file in the project root for full license information.",
       "documentInterfaces": false,
       "documentPrivateFields": false,
       "documentPrivateElements": false,
