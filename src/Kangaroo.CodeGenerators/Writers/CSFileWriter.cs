@@ -64,7 +64,7 @@ namespace Kangaroo.CodeGenerators.Writers
                 return;
             }
 
-            this.constructorAdditionalBodyLines.Add($"{this.GetWhiteSpace(2)}{bodyLine}");
+            this.constructorAdditionalBodyLines.Add($"{this.GetWhiteSpace(3)}{bodyLine}");
         }
 
         public void WriteDependencyInjection(string type, string name, CSFileWriterAccessModifierType accessModifierType = CSFileWriterAccessModifierType.Private, bool shouldSendToConstructorBase = false)
@@ -231,7 +231,7 @@ namespace Kangaroo.CodeGenerators.Writers
 
         private void WriteUsings(StringBuilder stringBuilder)
         {
-            foreach (var usingNamespace in this.usingNamespaces.OrderBy(x => x.StartsWith("System.")))
+            foreach (var usingNamespace in this.usingNamespaces.OrderBy(x => x))
             {
                 stringBuilder.AppendLine(usingNamespace);
             }

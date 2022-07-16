@@ -134,16 +134,20 @@ namespace Kangaroo.CodeGenerators.CodeWriters
             if (entity.EntityFields?.KeyField != null)
             {
                 List<string> getKeyMethodBodyLines = new List<string>();
+                List<string> setKeyMethodBodyLines = new List<string>();
 
                 getKeyMethodBodyLines.Add($"return this.{entity.EntityFields?.KeyField.Name};");
+                setKeyMethodBodyLines.Add($"this.{entity.EntityFields?.KeyField.Name} = key;");
 
                 switch (entity.EntityFields?.KeyField.KeyType)
                 {
                     case KeyType.Int:
                         fileWriter.WriteMethod("GetKey", "int", bodyLines: getKeyMethodBodyLines);
+                        fileWriter.WriteMethod("SetKey", parameters: "int key", bodyLines: setKeyMethodBodyLines);
                         break;
                     case KeyType.Guid:
                         fileWriter.WriteMethod("GetKey", "Guid", bodyLines: getKeyMethodBodyLines);
+                        fileWriter.WriteMethod("SetKey", parameters: "Guid key", bodyLines: setKeyMethodBodyLines);
                         break;
                     default:
                         break;

@@ -58,23 +58,23 @@ namespace Kangaroo.Infrastructure.DatabaseRepositories
             return databaseEntity;
         }
 
-        public async Task SaveAsync()
+        public async Task SaveAsync(CancellationToken cancellationToken = default)
         {
-            await this.dbContext.SaveChangesAsync();
+            await this.dbContext.SaveChangesAsync(cancellationToken);
         }
 
-        public async Task<IList<TEntity>> GetAllAsync<TDatabaseEntity, TEntity>()
+        public async Task<IList<TEntity>> GetAllAsync<TDatabaseEntity, TEntity>(CancellationToken cancellationToken = default)
             where TDatabaseEntity : class, IDatabaseEntity
             where TEntity : class, IEntity
         {
-            return await this.mapper.ProjectTo<TEntity>(this.dbContext.Set<TDatabaseEntity>().AsQueryable()).ToListAsync();
+            return await this.mapper.ProjectTo<TEntity>(this.dbContext.Set<TDatabaseEntity>().AsQueryable()).ToListAsync(cancellationToken);
         }
 
-        public async Task<IList<TEntity>> GetByConditionAsync<TDatabaseEntity, TEntity>(Func<IQueryable<TDatabaseEntity>, IQueryable<TDatabaseEntity>> queryable)
+        public async Task<IList<TEntity>> GetByConditionAsync<TDatabaseEntity, TEntity>(Func<IQueryable<TDatabaseEntity>, IQueryable<TDatabaseEntity>> queryable, CancellationToken cancellationToken = default)
             where TDatabaseEntity : class, IDatabaseEntity
             where TEntity : class, IEntity
         {
-            return await this.mapper.ProjectTo<TEntity>(queryable(this.dbContext.Set<TDatabaseEntity>().AsQueryable())).ToListAsync();
+            return await this.mapper.ProjectTo<TEntity>(queryable(this.dbContext.Set<TDatabaseEntity>().AsQueryable())).ToListAsync(cancellationToken);
         }
     }
 }

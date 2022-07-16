@@ -14,13 +14,13 @@ namespace Kangaroo.Infrastructure.DatabaseRepositories
             where TDatabaseEntity : class, IDatabaseEntity
             where TEntity : class, IEntity;
 
-        public Task SaveAsync();
+        public Task SaveAsync(CancellationToken cancellationToken = default);
 
-        public Task<IList<TEntity>> GetAllAsync<TDatabaseEntity, TEntity>()
+        public Task<IList<TEntity>> GetAllAsync<TDatabaseEntity, TEntity>(CancellationToken cancellationToken = default)
             where TDatabaseEntity : class, IDatabaseEntity
             where TEntity : class, IEntity;
 
-        public Task<IList<TEntity>> GetByConditionAsync<TDatabaseEntity, TEntity>(Func<IQueryable<TDatabaseEntity>, IQueryable<TDatabaseEntity>> queryable)
+        public Task<IList<TEntity>> GetByConditionAsync<TDatabaseEntity, TEntity>(Func<IQueryable<TDatabaseEntity>, IQueryable<TDatabaseEntity>> queryable, CancellationToken cancellationToken = default)
             where TDatabaseEntity : class, IDatabaseEntity
             where TEntity : class, IEntity;
     }

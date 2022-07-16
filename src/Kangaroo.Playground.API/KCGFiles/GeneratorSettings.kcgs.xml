@@ -1,16 +1,25 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <CodeGeneratorSettings xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 					   xsi:noNamespaceSchemaLocation="../../Kangaroo.CodeGenerators/Structure/CodeGeneratorSettingsSchema.xsd">
-	<BackendEntititesSettings 
-		EntitiesNamespace="Kangaroo.Playground.BackendEntities"
-		ValidatorsNamespace="Kangaroo.Playground.BackendEntities.Validators"/>
 	
-	<DatabaseRepositoriesSettings 
-		EntitiesNamespace="Kangaroo.Playground.BackendEntities"
-		DatabaseEntitiesNamespace="Kangaroo.Playground.DatabaseEntities"
-		DatabaseEntityTypeConfigurationNamespace="Kangaroo.Playground.DatabaseRepositories.EntityTypeConfiguration"
-		DbContextNamespace="Kangaroo.Playground.DatabaseRepositories.DBContexts"
-		DatabaseRepositoriesNamespace="Kangaroo.Playground.DatabaseRepositories"
-		DatabaseEntityMapperNamespace="Kangaroo.Playground.DatabaseRepositories.Mapper"
+	<DatabaseRepositoriesSettings
+		EntitiesNamespace="Kangaroo.Playground.Entities"
+		DatabaseEntitiesNamespace="Kangaroo.Playground.Infrastructure.DatabaseEntities"
+		DatabaseEntityTypeConfigurationNamespace="Kangaroo.Playground.Infrastructure.DatabaseRepositories.EntityTypeConfiguration"
+		DbContextNamespace="Kangaroo.Playground.Infrastructure.DatabaseRepositories.DBContexts"
+		DatabaseRepositoriesNamespace="Kangaroo.Playground.Infrastructure.DatabaseRepositories"
+		DatabaseEntityMapperNamespace="Kangaroo.Playground.Infrastructure.DatabaseRepositories.Mapper"
 		IdentityDbContextCustomUserClass="ApplicationUser"/>
+	
+	<BackendEntititesSettings 
+		EntitiesNamespace="Kangaroo.Playground.Entities"
+		ValidatorsNamespace="Kangaroo.Playground.Entities.Validators"/>
+
+	<ServicesSettings
+		ServicesNamespace="Kangaroo.Playground.Services"
+		DbContextNamespace="Kangaroo.Playground.Infrastructure.DatabaseRepositories.DBContexts"
+		DatabaseRepositoriesNamespace="Kangaroo.Playground.Infrastructure.DatabaseRepositories"
+		DatabaseEntitiesNamespace="Kangaroo.Playground.Infrastructure.DatabaseEntities"
+		EntitiesNamespace="Kangaroo.Playground.Entities"/>
+	
 </CodeGeneratorSettings>

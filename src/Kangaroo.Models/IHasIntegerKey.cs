@@ -10,5 +10,7 @@ namespace Kangaroo.Models
     public interface IHasIntegerKey
     {
         public int GetKey();
+
+        public void SetKey(int value);
     }
 }

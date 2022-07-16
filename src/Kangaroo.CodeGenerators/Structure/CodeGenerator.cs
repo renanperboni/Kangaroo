@@ -21,7 +21,7 @@ namespace Kangaroo.CodeGenerators.Structure
         public List<Summary> Summary { get; set; } = new List<Summary>();
 
         [XmlElement]
-        public List<Enum> Enum { get; set; } = new List<Enum>();
+        public List<EnumEntity> Enum { get; set; } = new List<EnumEntity>();
 
         [XmlElement]
         public List<CustomRequest> CustomRequest { get; set; } = new List<CustomRequest>();
@@ -124,6 +124,9 @@ namespace Kangaroo.CodeGenerators.Structure
 
         [XmlElement]
         public List<GenerateAutoMapper> GenerateAutoMapper { get; set; } = new List<GenerateAutoMapper>();
+
+        [XmlElement]
+        public GenerateSummaryGetterRequest GenerateSummaryGetterRequest { get; set; }
 
         [XmlElement]
         public GenerateSummariesGetterRequest GenerateSummariesGetterRequest { get; set; }
@@ -248,10 +251,6 @@ namespace Kangaroo.CodeGenerators.Structure
     [XmlRoot]
     public class GenerateEntityHandlerRequest
     {
-        [XmlAttribute]
-        [DefaultValue("")]
-        public string DatabaseEntityName { get; set; } = "";
-
         [XmlElement]
         public Fields AdditionalFields { get; set; }
 
@@ -271,10 +270,6 @@ namespace Kangaroo.CodeGenerators.Structure
     [XmlRoot]
     public class GenerateEntityGetterRequest
     {
-        [XmlAttribute]
-        [DefaultValue("")]
-        public string DatabaseEntityName { get; set; } = "";
-
         [XmlElement]
         public Fields AdditionalFields { get; set; }
 
@@ -294,10 +289,6 @@ namespace Kangaroo.CodeGenerators.Structure
     [XmlRoot]
     public class GenerateEntitiesGetterRequest
     {
-        [XmlAttribute]
-        [DefaultValue("")]
-        public string DatabaseEntityName { get; set; } = "";
-
         [XmlElement]
         public Fields RequestFields { get; set; }
 
@@ -315,12 +306,27 @@ namespace Kangaroo.CodeGenerators.Structure
     }
 
     [XmlRoot]
+    public class GenerateSummaryGetterRequest
+    {
+        [XmlElement]
+        public Fields AdditionalFields { get; set; }
+
+        [XmlElement]
+        public GenerateController GenerateController { get; set; }
+
+        [XmlElement]
+        public GenerateSummaryGetterService GenerateSummaryGetterService { get; set; }
+
+        [XmlElement]
+        public AdditionalUsings AdditionalUsings { get; set; }
+
+        [XmlElement]
+        public CustomAttributes CustomAttributes { get; set; }
+    }
+
+    [XmlRoot]
     public class GenerateSummariesGetterRequest
     {
-        [XmlAttribute]
-        [DefaultValue("")]
-        public string DatabaseEntityName { get; set; } = "";
-
         [XmlElement]
         public Fields RequestFields { get; set; }
 
@@ -369,6 +375,14 @@ namespace Kangaroo.CodeGenerators.Structure
     [XmlRoot]
     public class GenerateEntityHandlerService
     {
+        [XmlAttribute]
+        [DefaultValue("")]
+        public string DatabaseEntityName { get; set; } = "";
+
+        [XmlAttribute]
+        [DefaultValue(true)]
+        public bool IsDatabaseEntityHandler { get; set; } = true;
+
         [XmlElement]
         public AdditionalUsings AdditionalUsings { get; set; }
 
@@ -388,6 +402,16 @@ namespace Kangaroo.CodeGenerators.Structure
 
     [XmlRoot]
     public class GenerateEntitiesGetterService
+    {
+        [XmlElement]
+        public AdditionalUsings AdditionalUsings { get; set; }
+
+        [XmlElement]
+        public CustomAttributes CustomAttributes { get; set; }
+    }
+
+    [XmlRoot]
+    public class GenerateSummaryGetterService
     {
         [XmlElement]
         public AdditionalUsings AdditionalUsings { get; set; }
@@ -807,7 +831,7 @@ namespace Kangaroo.CodeGenerators.Structure
 
     #region Enums
     [XmlRoot]
-    public class Enum
+    public class EnumEntity
     {
         [XmlAttribute]
         public string Name { get; set; }
@@ -823,6 +847,10 @@ namespace Kangaroo.CodeGenerators.Structure
         [DefaultValue(false)]
         public bool AutoGenSequenceNumber { get; set; } = false;
 
+        [XmlElement]
+        public AdditionalUsings AdditionalUsings { get; set; }
+
+        [XmlElement]
         public CustomAttributes CustomAttributes { get; set; }
     }
 

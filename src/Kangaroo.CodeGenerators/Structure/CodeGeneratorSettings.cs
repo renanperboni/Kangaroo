@@ -14,7 +14,13 @@ namespace Kangaroo.CodeGenerators.Structure
 	public class CodeGeneratorSettings
 	{
 		[XmlElement]
-		public EnumsSettings EnumsSettings { get; set; }
+		public BackendEnumsSettings BackendEnumsSettings { get; set; }
+
+		[XmlElement]
+		public FrontendEnumsSettings FrontendEnumsSettings { get; set; }
+
+		[XmlElement]
+		public DatabaseRepositoriesSettings DatabaseRepositoriesSettings { get; set; }
 
 		[XmlElement]
 		public BackendEntititesSettings BackendEntititesSettings { get; set; }
@@ -23,7 +29,16 @@ namespace Kangaroo.CodeGenerators.Structure
 		public FrontendEntititesSettings FrontendEntititesSettings { get; set; }
 
 		[XmlElement]
-		public DatabaseRepositoriesSettings DatabaseRepositoriesSettings { get; set; }
+		public BackendCustomRequestsSettings BackendCustomRequestsSettings { get; set; }
+		
+		[XmlElement]
+		public FrontendCustomRequestsSettings FrontendCustomRequestsSettings { get; set; }
+
+		[XmlElement]
+		public BackendCustomResponsesSettings BackendCustomResponsesSettings { get; set; }
+		
+		[XmlElement]
+		public FrontendCustomResponsesSettings FrontendCustomResponsesSettings { get; set; }
 
 		[XmlElement]
 		public ServicesSettings ServicesSettings { get; set; }
@@ -36,7 +51,14 @@ namespace Kangaroo.CodeGenerators.Structure
 	}
 
 	[XmlRoot]
-	public class EnumsSettings
+	public class BackendEnumsSettings
+	{
+		[XmlAttribute]
+		public string EnumsNamespace { get; set; }
+	}
+
+	[XmlRoot]
+	public class FrontendEnumsSettings
 	{
 		[XmlAttribute]
 		public string EnumsNamespace { get; set; }
@@ -67,11 +89,59 @@ namespace Kangaroo.CodeGenerators.Structure
 	}
 
 	[XmlRoot]
+	public class BackendCustomRequestsSettings
+	{
+		[XmlAttribute]
+		public string CustomRequestsNamespace { get; set; }
+
+		[XmlAttribute]
+		public string ValidatorsNamespace { get; set; }
+	}
+
+	[XmlRoot]
+	public class FrontendCustomRequestsSettings
+	{
+		[XmlAttribute]
+		public string CustomRequestsNamespace { get; set; }
+
+		[XmlAttribute]
+		public string ValidatorsNamespace { get; set; }
+
+		[XmlAttribute]
+		[DefaultValue(true)]
+		public bool GenerateNotifyPropertyChanges { get; set; } = true;
+	}
+
+	[XmlRoot]
+	public class BackendCustomResponsesSettings
+	{
+		[XmlAttribute]
+		public string CustomResponsesNamespace { get; set; }
+
+		[XmlAttribute]
+		public string ValidatorsNamespace { get; set; }
+	}
+
+	[XmlRoot]
+	public class FrontendCustomResponsesSettings
+	{
+		[XmlAttribute]
+		public string CustomResponsesNamespace { get; set; }
+
+		[XmlAttribute]
+		public string ValidatorsNamespace { get; set; }
+
+		[XmlAttribute]
+		[DefaultValue(true)]
+		public bool GenerateNotifyPropertyChanges { get; set; } = true;
+	}
+
+	[XmlRoot]
 	public class DatabaseRepositoriesSettings
 	{
 		[XmlAttribute]
-		public string EntitiesNamespace { get; set; }
-
+		public string DbContextNamespace { get; set; }
+		
 		[XmlAttribute]
 		public string DatabaseEntitiesNamespace { get; set; }
 
@@ -79,13 +149,13 @@ namespace Kangaroo.CodeGenerators.Structure
 		public string DatabaseEntityTypeConfigurationNamespace { get; set; }
 
 		[XmlAttribute]
-		public string DbContextNamespace { get; set; }
-
-		[XmlAttribute]
 		public string DatabaseRepositoriesNamespace { get; set; }
 
 		[XmlAttribute]
 		public string DatabaseEntityMapperNamespace { get; set; }
+
+		[XmlAttribute]
+		public string EntitiesNamespace { get; set; }
 
 		[XmlAttribute]
 		[DefaultValue("Tb")]
@@ -119,10 +189,16 @@ namespace Kangaroo.CodeGenerators.Structure
 	public class ServicesSettings
 	{
 		[XmlAttribute]
+		public string DbContextNamespace { get; set; }
+
+		[XmlAttribute]
 		public string DatabaseEntitiesNamespace { get; set; }
 
 		[XmlAttribute]
 		public string DatabaseRepositoriesNamespace { get; set; }
+
+		[XmlAttribute]
+		public string EntitiesNamespace { get; set; }
 
 		[XmlAttribute]
 		public string ServicesNamespace { get; set; }

@@ -2,7 +2,7 @@
 
 	<PropertyGroup>
 		<TargetFramework>net6.0</TargetFramework>
-		<Nullable>enable</Nullable>
+		<Nullable>disable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<LangVersion>latest</LangVersion>
 	</PropertyGroup>
@@ -56,10 +56,12 @@
 		<ProjectReference Include="..\Kangaroo.Models.DatabaseEntities\Kangaroo.Models.DatabaseEntities.csproj" />
 		<ProjectReference Include="..\Kangaroo.Models.Entities\Kangaroo.Models.Entities.csproj" />
 		<ProjectReference Include="..\Kangaroo.Models\Kangaroo.Models.csproj" />
+		<ProjectReference Include="..\Kangaroo.Services\Kangaroo.Services.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Folder Include="DatabaseRepositories\" />
+	  <Folder Include="Infrastructure\DatabaseRepositories\" />
+	  <Folder Include="Entities\" />
 	</ItemGroup>
 
 </Project>

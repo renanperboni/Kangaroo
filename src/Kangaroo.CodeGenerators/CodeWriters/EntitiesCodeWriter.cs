@@ -20,12 +20,14 @@ namespace Kangaroo.CodeGenerators.CodeWriters
             {
                 foreach (var entity in codeGenerator.Entity)
                 {
-                    if (codeGeneratorSettings.BackendEntititesSettings != null)
+                    if (codeGeneratorSettings.BackendEntititesSettings != null
+                        && (entity.Location == Structure.Location.Both || entity.Location == Structure.Location.Backend))
                     {
                         GenerateEntities(codeGeneratorSettings, sourceProductionContext, entity, true);
                     }
 
-                    if (codeGeneratorSettings.FrontendEntititesSettings != null)
+                    if (codeGeneratorSettings.FrontendEntititesSettings != null
+                        && (entity.Location == Structure.Location.Both || entity.Location == Structure.Location.Frontend))
                     {
                         GenerateEntities(codeGeneratorSettings, sourceProductionContext, entity, false);
                     }
@@ -33,12 +35,14 @@ namespace Kangaroo.CodeGenerators.CodeWriters
 
                 foreach (var summary in codeGenerator.Summary)
                 {
-                    if (codeGeneratorSettings.BackendEntititesSettings != null)
+                    if (codeGeneratorSettings.BackendEntititesSettings != null
+                        && (summary.Location == Structure.Location.Both || summary.Location == Structure.Location.Backend))
                     {
                         GenerateSummaries(codeGeneratorSettings, sourceProductionContext, summary, true);
                     }
 
-                    if (codeGeneratorSettings.FrontendEntititesSettings != null)
+                    if (codeGeneratorSettings.FrontendEntititesSettings != null
+                        && (summary.Location == Structure.Location.Both || summary.Location == Structure.Location.Frontend))
                     {
                         GenerateSummaries(codeGeneratorSettings, sourceProductionContext, summary, false);
                     }
@@ -192,6 +196,59 @@ namespace Kangaroo.CodeGenerators.CodeWriters
                 includeAuditLog: summary.IncludeAuditLog,
                 isBackend: isBackend);
 
+            if (summary.GenerateSummaryGetterRequest != null)
+            {
+                var summaryGetterRequestInheritance = "ISummaryGetterRequest";
+                var summaryGetterRequestFields = summary.GenerateSummaryGetterRequest.AdditionalFields;
+
+                if (summary.SummaryFields?.KeyField?.KeyType != null)
+                {
+                    summaryGetterRequestFields = summaryGetterRequestFields ?? new Fields();
+
+                    summaryGetterRequestFields.KeyField = summary.SummaryFields?.KeyField;
+
+                    switch (summary.SummaryFields?.KeyField?.KeyType)
+                    {
+                        case KeyType.Int:
+                            summaryGetterRequestInheritance += ", IHasIntegerKey";
+                            break;
+                        case KeyType.Guid:
+                            summaryGetterRequestInheritance += ", IHasGuidKey";
+                            break;
+                        default:
+                            break;
+                    }
+                }
+
+                WriteRequestResponse(
+                    codeGeneratorSettings,
+                    sourceProductionContext,
+                    className: $"{summary.Name}GetterRequest",
+                    inheritance: summaryGetterRequestInheritance,
+                    entityPropertyType: string.Empty,
+                    entityPropertyName: string.Empty,
+                    entityPropertyValue: string.Empty,
+                    entityPropertyHasValidator: true,
+                    additionalUsings: summary.GenerateSummaryGetterRequest.AdditionalUsings,
+                    customAttributes: summary.GenerateSummaryGetterRequest.CustomAttributes,
+                    fields: summaryGetterRequestFields,
+                    isBackend: isBackend);
+
+                WriteRequestResponse(
+                    codeGeneratorSettings,
+                    sourceProductionContext,
+                    className: $"{summary.Name}GetterResponse",
+                    inheritance: $"ISummaryGetterResponse<{summary.Name}>",
+                    entityPropertyType: summary.Name,
+                    entityPropertyName: "Summary",
+                    entityPropertyValue: string.Empty,
+                    entityPropertyHasValidator: false,
+                    additionalUsings: summary.GenerateSummaryGetterRequest.AdditionalUsings,
+                    customAttributes: summary.GenerateSummaryGetterRequest.CustomAttributes,
+                    fields: null,
+                    isBackend: isBackend);
+            }
+
             if (summary.GenerateSummariesGetterRequest != null)
             {
                 WriteRequestResponse(
@@ -341,6 +398,8 @@ namespace Kangaroo.CodeGenerators.CodeWriters
 
             WriteKeyField(keyField, entityFileWriter, currentLocation);
 
+            entityValidatorFileWriter.WriteConstructorAdditionalBodyLine($"this.SetCustomRules();");
+
             sourceProductionContext.WriteNewCSFile(entityName, entityFileWriter);
             sourceProductionContext.WriteNewCSFile(validatorClassName, entityValidatorFileWriter);
         }
@@ -420,6 +479,8 @@ namespace Kangaroo.CodeGenerators.CodeWriters
 
             WriteKeyField(fields?.KeyField, fileWriter, currentLocation);
 
+            validatorFileWriter.WriteConstructorAdditionalBodyLine($"this.SetCustomRules();");
+
             sourceProductionContext.WriteNewCSFile(className, fileWriter);
             sourceProductionContext.WriteNewCSFile(validatorClassName, validatorFileWriter);
         }
@@ -434,16 +495,20 @@ namespace Kangaroo.CodeGenerators.CodeWriters
                 }
 
                 List<string> getKeyMethodBodyLines = new List<string>();
+                List<string> setKeyMethodBodyLines = new List<string>();
 
                 getKeyMethodBodyLines.Add($"return this.{keyField.Name};");
+                setKeyMethodBodyLines.Add($"this.{keyField.Name} = key;");
 
                 switch (keyField.KeyType)
                 {
                     case KeyType.Int:
                         fileWriter.WriteMethod("GetKey", "int", bodyLines: getKeyMethodBodyLines);
+                        fileWriter.WriteMethod("SetKey", parameters: "int key", bodyLines: setKeyMethodBodyLines);
                         break;
                     case KeyType.Guid:
                         fileWriter.WriteMethod("GetKey", "Guid", bodyLines: getKeyMethodBodyLines);
+                        fileWriter.WriteMethod("SetKey", parameters: "Guid key", bodyLines: setKeyMethodBodyLines);
                         break;
                     default:
                         break;

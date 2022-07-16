@@ -14,9 +14,14 @@ namespace Kangaroo.CodeGenerators.Helpers
     {
         public static void Generate(CodeGeneratorSettings codeGeneratorSettings, List<CodeGenerator> codeGenerators, SourceProductionContext sourceProductionContext)
         {
-            if (codeGeneratorSettings.EnumsSettings != null)
+            if (codeGeneratorSettings.BackendEnumsSettings != null || codeGeneratorSettings.FrontendEnumsSettings != null)
             {
                 EnumsCodeWriter.Generate(codeGeneratorSettings, codeGenerators, sourceProductionContext);
+            }
+
+            if (codeGeneratorSettings.DatabaseRepositoriesSettings != null)
+            {
+                DatabaseRepositoriesCodeWriter.Generate(codeGeneratorSettings, codeGenerators, sourceProductionContext);
             }
 
             if (codeGeneratorSettings.BackendEntititesSettings != null || codeGeneratorSettings.FrontendEntititesSettings != null)
@@ -24,9 +29,14 @@ namespace Kangaroo.CodeGenerators.Helpers
                 EntitiesCodeWriter.Generate(codeGeneratorSettings, codeGenerators, sourceProductionContext);
             }
 
-            if (codeGeneratorSettings.DatabaseRepositoriesSettings != null)
+            if (codeGeneratorSettings.BackendCustomRequestsSettings != null || codeGeneratorSettings.FrontendCustomRequestsSettings != null)
             {
-                DatabaseRepositoriesCodeWriter.Generate(codeGeneratorSettings, codeGenerators, sourceProductionContext);
+                CustomRequestsCodeWriter.Generate(codeGeneratorSettings, codeGenerators, sourceProductionContext);
+            }
+
+            if (codeGeneratorSettings.BackendCustomResponsesSettings != null || codeGeneratorSettings.FrontendCustomResponsesSettings != null)
+            {
+                CustomResponsesCodeWriter.Generate(codeGeneratorSettings, codeGenerators, sourceProductionContext);
             }
 
             if (codeGeneratorSettings.ServicesSettings != null)

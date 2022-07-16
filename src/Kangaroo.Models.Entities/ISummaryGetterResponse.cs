@@ -6,9 +6,10 @@ namespace Kangaroo.Models.Entities
     using System;
     using System.Collections.Generic;
     using System.Text;
-    using Kangaroo.Models;
 
-    public interface IEntity
+    public interface ISummaryGetterResponse<TSummary> : IResponse
+        where TSummary : class, ISummary
     {
+        public TSummary Summary { get; set; }
     }
 }

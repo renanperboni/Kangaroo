@@ -10,5 +10,7 @@ namespace Kangaroo.Models
     public interface IHasGuidKey
     {
         public Guid GetKey();
+
+        public void SetKey(Guid key);
     }
 }
