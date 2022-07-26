@@ -21,5 +21,10 @@
 		DatabaseRepositoriesNamespace="Kangaroo.Playground.Infrastructure.DatabaseRepositories"
 		DatabaseEntitiesNamespace="Kangaroo.Playground.Infrastructure.DatabaseEntities"
 		EntitiesNamespace="Kangaroo.Playground.Entities"/>
+
+	<APISettings
+		ControllersNamespace="Kangaroo.Playground.API.Controllers"
+		ServicesNamespace="Kangaroo.Playground.Services"
+		EntitiesNamespace="Kangaroo.Playground.Entities"/>
 	
 </CodeGeneratorSettings>

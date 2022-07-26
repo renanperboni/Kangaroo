@@ -228,12 +228,12 @@
 	</xs:complexType>
 	<xs:complexType name="GenerateAutoMapper">
 		<xs:sequence>
-			<xs:element minOccurs="0" maxOccurs="1" default="Entity" name="AutoMapperSourceType" type="AutoMapperSourceType" />
 			<xs:element minOccurs="0" maxOccurs="1" name="IgnoreFields" type="IgnoreFields" />
 			<xs:element minOccurs="0" maxOccurs="1" name="AdditionalUsings" type="AdditionalUsings" />
 			<xs:element minOccurs="0" maxOccurs="1" name="CustomAttributes" type="CustomAttributes" />
 		</xs:sequence>
 		<xs:attribute default="" name="DatabaseEntityName" type="xs:string" />
+		<xs:attribute default="Entity" name="AutoMapperSourceType" type="AutoMapperSourceType" />
 	</xs:complexType>
 	<xs:simpleType name="AutoMapperSourceType">
 		<xs:restriction base="xs:string">

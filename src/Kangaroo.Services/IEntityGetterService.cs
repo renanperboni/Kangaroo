@@ -5,7 +5,7 @@ namespace Kangaroo.Services
 {
     using Kangaroo.Models.Entities;
 
-    public interface IEntityGetterService<TEntity, TEntityGetterRequest, TEntityGetterResponse> : IService
+    public interface IEntityGetterService<TEntity, TEntityGetterRequest, TEntityGetterResponse> : ITransientService
         where TEntity : class, IEntity, new()
         where TEntityGetterRequest : class, IEntityGetterRequest
         where TEntityGetterResponse : class, IEntityGetterResponse<TEntity>, new()

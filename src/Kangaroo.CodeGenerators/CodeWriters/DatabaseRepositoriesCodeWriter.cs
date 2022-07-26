@@ -26,6 +26,8 @@ namespace Kangaroo.CodeGenerators.CodeWriters
                         WriteDatabaseEntityTypeConfiguration(codeGeneratorSettings, sourceProductionContext, entity);
                         WriteDatabaseEntity(codeGeneratorSettings, sourceProductionContext, entity);
                     }
+
+                    WriteDatabaseIdentityRoleConfiguration(codeGeneratorSettings, sourceProductionContext, codeGenerator);
                 }
             }
 
@@ -303,6 +305,97 @@ namespace Kangaroo.CodeGenerators.CodeWriters
             sourceProductionContext.WriteNewCSFile(configurationClassName, configurationfileWriter);
         }
 
+        private static void WriteDatabaseIdentityRoleConfiguration(CodeGeneratorSettings codeGeneratorSettings, SourceProductionContext sourceProductionContext, CodeGenerator codeGenerator)
+        {
+            if (codeGeneratorSettings.DatabaseRepositoriesSettings?.GenerateDatabaseEntityTypeConfiguration != true
+                || codeGeneratorSettings.DatabaseRepositoriesSettings?.UseIdentityDbContext == false)
+            {
+                return;
+            }
+
+            var configurationClassName = $"IdentityRoleConfiguration";
+            var configurationfileWriter = new CSFileWriter(
+                CSFileWriterType.Class,
+                codeGeneratorSettings.DatabaseRepositoriesSettings?.DatabaseEntityTypeConfigurationNamespace,
+                configurationClassName,
+                isPartial: true,
+                inheritance: $"IEntityTypeConfiguration<IdentityRole>");
+
+            configurationfileWriter.WriteUsing("System");
+            configurationfileWriter.WriteUsing("System.Collections.Generic");
+            configurationfileWriter.WriteUsing("System.Text");
+            configurationfileWriter.WriteUsing("Microsoft.AspNetCore.Identity");
+            configurationfileWriter.WriteUsing("Microsoft.EntityFrameworkCore");
+            configurationfileWriter.WriteUsing("Microsoft.EntityFrameworkCore.Metadata.Builders");
+            configurationfileWriter.WriteUsing(codeGeneratorSettings.DatabaseRepositoriesSettings?.DatabaseEntitiesNamespace);
+
+            List<string> configureMethodBodyLines = new List<string>();
+
+            foreach (var entity in codeGenerator.Entity)
+            {
+                if (entity.GenerateEntityHandlerRequest?.GenerateController?.Permissions != null)
+                {
+                    foreach (var permission in entity.GenerateEntityHandlerRequest.GenerateController.Permissions.Permission)
+                    {
+                        WritePermission(permission.Name);
+                    }
+                }
+
+                if (entity.GenerateEntityGetterRequest?.GenerateController?.Permissions != null)
+                {
+                    foreach (var permission in entity.GenerateEntityGetterRequest.GenerateController.Permissions.Permission)
+                    {
+                        WritePermission(permission.Name);
+                    }
+                }
+
+                if (entity.GenerateEntitiesGetterRequest?.GenerateController?.Permissions != null)
+                {
+                    foreach (var permission in entity.GenerateEntitiesGetterRequest.GenerateController.Permissions.Permission)
+                    {
+                        WritePermission(permission.Name);
+                    }
+                }
+            }
+
+            foreach (var summary in codeGenerator.Summary)
+            {
+                if (summary.GenerateSummaryGetterRequest?.GenerateController?.Permissions != null)
+                {
+                    foreach (var permission in summary.GenerateSummaryGetterRequest.GenerateController.Permissions.Permission)
+                    {
+                        WritePermission(permission.Name);
+                    }
+                }
+
+                if (summary.GenerateSummariesGetterRequest?.GenerateController?.Permissions != null)
+                {
+                    foreach (var permission in summary.GenerateSummariesGetterRequest.GenerateController.Permissions.Permission)
+                    {
+                        WritePermission(permission.Name);
+                    }
+                }
+            }
+
+            configureMethodBodyLines.Add($"this.OnConfiguring(builder);");
+
+            configurationfileWriter.WriteMethod("Configure", parameters: "EntityTypeBuilder<IdentityRole> builder", bodyLines: configureMethodBodyLines);
+
+            configurationfileWriter.WriteMethod("OnConfiguring", parameters: "EntityTypeBuilder<IdentityRole> builder", isPartial: true);
+
+            sourceProductionContext.WriteNewCSFile(configurationClassName, configurationfileWriter);
+
+            void WritePermission(string permission)
+            {
+                var bodyLine = $"builder.HasData(new IdentityRole(\"{permission}\"));";
+
+                if (!configureMethodBodyLines.Any(x => x == bodyLine))
+                {
+                    configureMethodBodyLines.Add(bodyLine);
+                }
+            }
+        }
+
         private static void WriteDbContext(CodeGeneratorSettings codeGeneratorSettings, SourceProductionContext sourceProductionContext, IEnumerable<Entity> entities)
         {
             var dbContextClassName = "ApplicationDbContext";
@@ -339,6 +432,11 @@ namespace Kangaroo.CodeGenerators.CodeWriters
                     var configurationClassName = $"{GetDatabaseEntityNameWithPrefix(codeGeneratorSettings, entity.Name)}Configuration";
                     modelCreatingMethodBodyLines.Add($"modelBuilder.ApplyConfiguration(new {configurationClassName}());");
                 }
+            }
+
+            if (codeGeneratorSettings.DatabaseRepositoriesSettings?.UseIdentityDbContext == true)
+            {
+                modelCreatingMethodBodyLines.Add("modelBuilder.ApplyConfiguration(new IdentityRoleConfiguration());");
             }
 
             modelCreatingMethodBodyLines.Add("this.OnCustomModelCreating(modelBuilder);");

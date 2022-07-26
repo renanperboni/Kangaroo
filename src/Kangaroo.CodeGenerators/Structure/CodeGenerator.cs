@@ -234,7 +234,7 @@ namespace Kangaroo.CodeGenerators.Structure
         [DefaultValue("")]
         public string DatabaseEntityName { get; set; } = "";
 
-        [XmlElement]
+        [XmlAttribute]
         [DefaultValue(AutoMapperSourceType.Entity)]
         public AutoMapperSourceType AutoMapperSourceType { get; set; } = AutoMapperSourceType.Entity;
 

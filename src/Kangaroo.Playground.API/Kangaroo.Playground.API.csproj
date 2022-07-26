@@ -51,7 +51,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<ProjectReference Include="..\Kangaroo.API\Kangaroo.API.csproj" />
 		<ProjectReference Include="..\Kangaroo.CodeGenerators\Kangaroo.CodeGenerators.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
+		<ProjectReference Include="..\Kangaroo.Exceptions\Kangaroo.Exceptions.csproj" />
 		<ProjectReference Include="..\Kangaroo.Infrastructure.DatabaseRepositories\Kangaroo.Infrastructure.DatabaseRepositories.csproj" />
 		<ProjectReference Include="..\Kangaroo.Models.DatabaseEntities\Kangaroo.Models.DatabaseEntities.csproj" />
 		<ProjectReference Include="..\Kangaroo.Models.Entities\Kangaroo.Models.Entities.csproj" />

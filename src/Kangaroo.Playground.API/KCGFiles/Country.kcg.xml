@@ -4,7 +4,7 @@
 	<Entity Name="Country" PluralName="Countries">
 		<EntityFields>
 			<KeyField KeyType="Int" Name="CountryId"/>
-			<StringField Name="Name"/>
+			<StringField Name="Name" IsRequired="true"/>
 			<StringField Name="IBGECode"/>
 		</EntityFields>
 		
@@ -12,12 +12,13 @@
 			<GenerateDatabaseEntityConfiguration />
 		</GenerateDatabaseEntity>
 
-		<GenerateAutoMapper/>
+		<GenerateAutoMapper AutoMapperSourceType="Entity" />
+		<GenerateAutoMapper AutoMapperSourceType="DatabaseEntity" />
 
 		<GenerateEntityHandlerRequest>
 			<GenerateController>
 				<Permissions>
-					<Permission Name="Per_General_Handler_Country"/>
+					<Permission Name="General_Country_Handler"/>
 				</Permissions>
 			</GenerateController>
 			<GenerateEntityHandlerService />
@@ -26,7 +27,7 @@
 		<GenerateEntityGetterRequest>
 			<GenerateController>
 				<Permissions>
-					<Permission Name="Per_General_Get_Country"/>
+					<Permission Name="General_Country_Get"/>
 				</Permissions>
 			</GenerateController>
 			<GenerateEntityGetterService />
@@ -35,7 +36,7 @@
 		<GenerateEntitiesGetterRequest>
 			<GenerateController>
 				<Permissions>
-					<Permission Name="Per_General_Get_Countries"/>
+					<Permission Name="General_Countries_Get"/>
 				</Permissions>
 			</GenerateController>
 			<GenerateEntitiesGetterService />

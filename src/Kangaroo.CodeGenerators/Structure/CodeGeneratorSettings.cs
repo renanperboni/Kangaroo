@@ -216,6 +216,9 @@ namespace Kangaroo.CodeGenerators.Structure
 
 		[XmlAttribute]
 		public string ServicesNamespace { get; set; }
+
+		[XmlAttribute]
+		public string EntitiesNamespace { get; set; }
 	}
 
 	[XmlRoot]
@@ -223,5 +226,8 @@ namespace Kangaroo.CodeGenerators.Structure
 	{
 		[XmlAttribute]
 		public string APIClientNamespace { get; set; }
+
+		[XmlAttribute]
+		public string EntitiesNamespace { get; set; }
 	}
 }

@@ -472,6 +472,7 @@ namespace Kangaroo.CodeGenerators.CodeWriters
                 if (entityPropertyHasValidator)
                 {
                     validatorFileWriter.WriteConstructorAdditionalBodyLine($"this.RuleFor(x => x.{entityPropertyName}).NotNull().NotEmpty();");
+                    validatorFileWriter.WriteConstructorAdditionalBodyLine($"this.RuleFor(x => x.{entityPropertyName}).SetValidator(x => new {entityPropertyType}Validator());");
                 }
             }
 
@@ -559,6 +560,11 @@ namespace Kangaroo.CodeGenerators.CodeWriters
                     if (maxLength > 0)
                     {
                         validatorFileWriter.WriteConstructorAdditionalBodyLine($"this.RuleFor(x => x.{field.Name}).MaximumLength({maxLength});");
+                    }
+
+                    if (field is EntityField entityField)
+                    {
+                        validatorFileWriter.WriteConstructorAdditionalBodyLine($"this.RuleFor(x => x.{field.Name}).SetValidator(x => new {entityField.Type}Validator());");
                     }
 
                     var attributes = new List<string>();

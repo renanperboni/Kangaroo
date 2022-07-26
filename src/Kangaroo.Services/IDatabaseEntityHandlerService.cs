@@ -6,7 +6,7 @@ namespace Kangaroo.Services
     using Kangaroo.Models.DatabaseEntities;
     using Kangaroo.Models.Entities;
 
-    public interface IDatabaseEntityHandlerService<TDatabaseEntity, TEntity, TEntityHandlerRequest, TEntityHandlerResponse> : IService
+    public interface IDatabaseEntityHandlerService<TDatabaseEntity, TEntity, TEntityHandlerRequest, TEntityHandlerResponse> : ITransientService
         where TDatabaseEntity : class, IDatabaseEntity
         where TEntity : class, IEntity
         where TEntityHandlerRequest : class, IEntityHandlerRequest<TEntity>

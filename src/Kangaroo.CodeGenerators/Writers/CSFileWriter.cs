@@ -128,7 +128,7 @@ namespace Kangaroo.CodeGenerators.Writers
             });
         }
 
-        public void WriteMethod(string name, string returnType = "", string parameters = "", List<string> bodyLines = null, CSFileWriterAccessModifierType accessModifierType = CSFileWriterAccessModifierType.Public, bool isPartial = false, bool isVirtual = false, bool isOverride = false)
+        public void WriteMethod(string name, string returnType = "", string parameters = "", List<string> attributes = null, List<string> bodyLines = null, CSFileWriterAccessModifierType accessModifierType = CSFileWriterAccessModifierType.Public, bool isPartial = false, bool isVirtual = false, bool isOverride = false)
         {
             if (bodyLines == null)
             {
@@ -144,7 +144,8 @@ namespace Kangaroo.CodeGenerators.Writers
                 ReturnType = returnType,
                 Name = name,
                 Parameters = parameters,
-                BodyLines = bodyLines,
+                Attributes = attributes ?? new List<string>(),
+                BodyLines = bodyLines ?? new List<string>(),
             });
         }
 
@@ -526,6 +527,11 @@ namespace Kangaroo.CodeGenerators.Writers
                     methodStatement += @";";
                 }
 
+                foreach (var methodAttribute in method.Attributes)
+                {
+                    stringBuilder.AppendLine($"{this.GetWhiteSpace(2)}[{methodAttribute}]");
+                }
+
                 stringBuilder.AppendLine(methodStatement);
 
                 if (!method.IsPartial)
@@ -640,6 +646,8 @@ namespace Kangaroo.CodeGenerators.Writers
             public string Name { get; set; }
 
             public string Parameters { get; set; }
+
+            public List<string> Attributes { get; set; } = new List<string>();
 
             public List<string> BodyLines { get; set; } = new List<string>();
         }

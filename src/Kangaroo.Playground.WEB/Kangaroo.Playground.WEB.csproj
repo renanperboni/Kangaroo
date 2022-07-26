@@ -1,0 +1,61 @@
+<Project Sdk="Microsoft.NET.Sdk.BlazorWebAssembly">
+
+	<PropertyGroup>
+		<TargetFramework>net6.0</TargetFramework>
+		<Nullable>enable</Nullable>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<ServiceWorkerAssetsManifest>service-worker-assets.js</ServiceWorkerAssetsManifest>
+		<LangVersion>latest</LangVersion>
+	</PropertyGroup>
+
+	<PropertyGroup>
+		<!--
+		  Make sure any documentation comments which are included in code get checked for syntax during the build, but do
+		  not report warnings for missing comments.
+    
+		  CS1573: Parameter 'parameter' has no matching param tag in the XML comment for 'parameter' (but other parameters do)
+		  CS1591: Missing XML comment for publicly visible type or member 'Type_or_Member'
+		-->
+		<DocumentationFile>$(OutputPath)$(AssemblyName).xml</DocumentationFile>
+		<NoWarn>$(NoWarn),1573,1591,1712</NoWarn>
+	</PropertyGroup>
+
+	<ItemGroup>
+	  <None Remove="KCGFiles\GeneratorSettings.kcgs.xml" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<AdditionalFiles Include="..\Stylecop.json">
+			<Link>Stylecop.json</Link>
+		</AdditionalFiles>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <AdditionalFiles Include="..\Kangaroo.Playground.API\KCGFiles\Country.kcg.xml" Link="KCGFiles\Country.kcg.xml" />
+	  <AdditionalFiles Include="KCGFiles\GeneratorSettings.kcgs.xml" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="FluentValidation" Version="11.1.0" />
+		<PackageReference Include="Refit" Version="6.3.2" />
+		<PackageReference Include="StyleCop.Analyzers" Version="1.1.118">
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+			<PrivateAssets>all</PrivateAssets>
+		</PackageReference>
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\Kangaroo.APIClient\Kangaroo.APIClient.csproj" />
+		<ProjectReference Include="..\Kangaroo.CodeGenerators\Kangaroo.CodeGenerators.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
+		<ProjectReference Include="..\Kangaroo.Exceptions\Kangaroo.Exceptions.csproj" />
+		<ProjectReference Include="..\Kangaroo.Models.Entities\Kangaroo.Models.Entities.csproj" />
+		<ProjectReference Include="..\Kangaroo.Models\Kangaroo.Models.csproj" />
+		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="6.0.6" />
+		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="6.0.6" PrivateAssets="all" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ServiceWorker Include="wwwroot\service-worker.js" PublishedContent="wwwroot\service-worker.published.js" />
+	</ItemGroup>
+
+</Project>

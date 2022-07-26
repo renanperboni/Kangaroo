@@ -3,7 +3,7 @@
 
 namespace Kangaroo.Services
 {
-    public interface ICurrentUserService
+    public interface ICurrentUserService : IScopedService
     {
         public int GetCurrentUserId();
 
