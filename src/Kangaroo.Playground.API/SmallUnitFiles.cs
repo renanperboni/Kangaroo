@@ -122,7 +122,7 @@ namespace Kangaroo.Playground.API
             {
                 Entity = new Country()
                 {
-                    CountryId = 1,
+                    CountryId = Guid.NewGuid(),
                     Name = "This is my correct name",
                     DataState = DataState.Updated,
                 }

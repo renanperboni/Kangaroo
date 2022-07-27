@@ -3,7 +3,7 @@
 		 xsi:noNamespaceSchemaLocation="../../Kangaroo.CodeGenerators/Structure/CodeGeneratorSchema.xsd">
 	<Entity Name="Country" PluralName="Countries">
 		<EntityFields>
-			<KeyField KeyType="Int" Name="CountryId"/>
+			<KeyField KeyType="Guid" Name="CountryId"/>
 			<StringField Name="Name" IsRequired="true"/>
 			<StringField Name="IBGECode"/>
 		</EntityFields>

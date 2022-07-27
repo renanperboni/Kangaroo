@@ -38,15 +38,17 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kangaroo.Services", "Kangar
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Exceptions", "Exceptions", "{CB0C2E4C-3B7F-41E8-B699-1634554E80E5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kangaroo.Exceptions", "Kangaroo.Exceptions\Kangaroo.Exceptions.csproj", "{A711DF0C-923F-4A89-B21A-0E21329F88FF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kangaroo.Exceptions", "Kangaroo.Exceptions\Kangaroo.Exceptions.csproj", "{A711DF0C-923F-4A89-B21A-0E21329F88FF}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "API", "API", "{844AA63B-24BF-46C6-B5C0-6ED8C1822A2A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kangaroo.API", "Kangaroo.API\Kangaroo.API.csproj", "{0E3E3F66-A007-4FDA-8776-EC90DFFA8508}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kangaroo.API", "Kangaroo.API\Kangaroo.API.csproj", "{0E3E3F66-A007-4FDA-8776-EC90DFFA8508}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kangaroo.Playground.WEB", "Kangaroo.Playground.WEB\Kangaroo.Playground.WEB.csproj", "{0F1B42C4-5883-4566-AC52-041973FC427A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kangaroo.Playground.WEB", "Kangaroo.Playground.WEB\Kangaroo.Playground.WEB.csproj", "{0F1B42C4-5883-4566-AC52-041973FC427A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kangaroo.APIClient", "Kangaroo.APIClient\Kangaroo.APIClient.csproj", "{7E9EC74F-0F23-44C7-8465-87817F766382}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kangaroo.APIClient", "Kangaroo.APIClient\Kangaroo.APIClient.csproj", "{7E9EC74F-0F23-44C7-8465-87817F766382}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kangaroo.Playground.Tests", "Kangaroo.Playground.Tests\Kangaroo.Playground.Tests.csproj", "{101E80DD-7E8E-4C5D-8A51-6895FDC6FD5B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -102,6 +104,10 @@ Global
 		{7E9EC74F-0F23-44C7-8465-87817F766382}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7E9EC74F-0F23-44C7-8465-87817F766382}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7E9EC74F-0F23-44C7-8465-87817F766382}.Release|Any CPU.Build.0 = Release|Any CPU
+		{101E80DD-7E8E-4C5D-8A51-6895FDC6FD5B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{101E80DD-7E8E-4C5D-8A51-6895FDC6FD5B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{101E80DD-7E8E-4C5D-8A51-6895FDC6FD5B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{101E80DD-7E8E-4C5D-8A51-6895FDC6FD5B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -125,6 +131,7 @@ Global
 		{0E3E3F66-A007-4FDA-8776-EC90DFFA8508} = {844AA63B-24BF-46C6-B5C0-6ED8C1822A2A}
 		{0F1B42C4-5883-4566-AC52-041973FC427A} = {EFCA1B58-BA4E-4DA8-8200-AB5A3F1D02C1}
 		{7E9EC74F-0F23-44C7-8465-87817F766382} = {844AA63B-24BF-46C6-B5C0-6ED8C1822A2A}
+		{101E80DD-7E8E-4C5D-8A51-6895FDC6FD5B} = {EFCA1B58-BA4E-4DA8-8200-AB5A3F1D02C1}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {6B6DD020-B2B0-455B-8C59-C0EF80AABBF5}
