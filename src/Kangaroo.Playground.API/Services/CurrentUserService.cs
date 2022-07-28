@@ -8,22 +8,13 @@ namespace Kangaroo.Playground.API.Services
 
     public class CurrentUserService : ICurrentUserService
     {
-        public Guid GetCurrentUserGuid()
-        {
-            return Guid.NewGuid();
-        }
+        public string CurrentUserId { get; } = string.Empty;
 
-        public int GetCurrentUserId()
-        {
-            return default;
-        }
+        public string CurrentUserName { get; } = string.Empty;
 
-        public string GetCurrentUserLogin()
-        {
-            return string.Empty;
-        }
+        public string CurrentUserEmail { get; } = string.Empty;
 
-        public string GetCurrentUserName()
+        public string GetCurrentUserNameToAudit()
         {
             return string.Empty;
         }

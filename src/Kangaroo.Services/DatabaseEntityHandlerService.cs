@@ -15,7 +15,7 @@ namespace Kangaroo.Services
     using Kangaroo.Models.Entities;
     using Microsoft.EntityFrameworkCore;
 
-    public abstract class DatabaseEntityHandlerService<TDbContext, TDatabaseEntity, TEntity, TEntityHandlerRequest, TEntityHandlerResponse> : IDatabaseEntityHandlerService<TDatabaseEntity, TEntity, TEntityHandlerRequest, TEntityHandlerResponse>
+    public abstract class DatabaseEntityHandlerService<TDbContext, TDatabaseEntity, TEntity, TEntityHandlerRequest, TEntityHandlerResponse> : ServiceBase, IDatabaseEntityHandlerService<TDatabaseEntity, TEntity, TEntityHandlerRequest, TEntityHandlerResponse>
         where TDbContext : DbContext
         where TDatabaseEntity : class, IDatabaseEntity
         where TEntity : class, IEntity
@@ -50,12 +50,12 @@ namespace Kangaroo.Services
                 if (dataState.DataState == DataState.Inserted)
                 {
                     auditLog.CreatedAt = DateTimeOffset.Now;
-                    auditLog.CreatedByUserName = this.currentUserService.GetCurrentUserName();
+                    auditLog.CreatedByUserName = this.currentUserService.GetCurrentUserNameToAudit();
                 }
                 else if (dataState.DataState == DataState.Updated)
                 {
                     auditLog.UpdatedAt = DateTimeOffset.Now;
-                    auditLog.UpdatedByUserName = this.currentUserService.GetCurrentUserName();
+                    auditLog.UpdatedByUserName = this.currentUserService.GetCurrentUserNameToAudit();
                 }
             }
 

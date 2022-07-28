@@ -21,7 +21,7 @@ namespace Kangaroo.CodeGenerators.CodeWriters
                 {
                     if (codeGeneratorSettings.APIClientSettings != null)
                     {
-                        GenerateAPIClients(codeGeneratorSettings, sourceProductionContext, entity);
+                        GenerateAPIClient(codeGeneratorSettings, sourceProductionContext, entity);
                     }
                 }
 
@@ -29,13 +29,18 @@ namespace Kangaroo.CodeGenerators.CodeWriters
                 {
                     if (codeGeneratorSettings.APIClientSettings != null)
                     {
-                        GenerateAPIClients(codeGeneratorSettings, sourceProductionContext, summary);
+                        GenerateAPIClient(codeGeneratorSettings, sourceProductionContext, summary);
                     }
                 }
             }
+
+            if (codeGeneratorSettings.APIClientSettings?.GenerateIdentityAPIClient == true)
+            {
+                GenerateIdentityAPIClient(codeGeneratorSettings, sourceProductionContext);
+            }
         }
 
-        public static void GenerateAPIClients(CodeGeneratorSettings codeGeneratorSettings, SourceProductionContext sourceProductionContext, Entity entity)
+        private static void GenerateAPIClient(CodeGeneratorSettings codeGeneratorSettings, SourceProductionContext sourceProductionContext, Entity entity)
         {
             if (entity.GenerateEntityHandlerRequest?.GenerateController?.GenerateAPIClient == true)
             {
@@ -53,7 +58,7 @@ namespace Kangaroo.CodeGenerators.CodeWriters
             }
         }
 
-        public static void GenerateAPIClients(CodeGeneratorSettings codeGeneratorSettings, SourceProductionContext sourceProductionContext, Summary summary)
+        private static void GenerateAPIClient(CodeGeneratorSettings codeGeneratorSettings, SourceProductionContext sourceProductionContext, Summary summary)
         {
             if (summary.GenerateSummaryGetterRequest?.GenerateController?.GenerateAPIClient == true)
             {
@@ -64,6 +69,65 @@ namespace Kangaroo.CodeGenerators.CodeWriters
             {
                 WriteGettersAPIClient(codeGeneratorSettings, sourceProductionContext, summary.PluralName, summary.GenerateSummariesGetterRequest?.GenerateController?.IsAuthenticationRequired == true);
             }
+        }
+
+        private static void GenerateIdentityAPIClient(CodeGeneratorSettings codeGeneratorSettings, SourceProductionContext sourceProductionContext)
+        {
+            var interfaceAnonymousName = $"IApplicationUserAnonymousClient";
+            var anonymousAPIClientFileWriter = new CSFileWriter(
+                CSFileWriterType.Interface,
+                codeGeneratorSettings.APIClientSettings?.APIClientNamespace,
+                interfaceAnonymousName,
+                isPartial: true,
+                inheritance: "IKangarooAnonymousAPIClient");
+
+            anonymousAPIClientFileWriter.WriteUsing("System");
+            anonymousAPIClientFileWriter.WriteUsing("System.Threading.Tasks");
+            anonymousAPIClientFileWriter.WriteUsing("Kangaroo.APIClient");
+            anonymousAPIClientFileWriter.WriteUsing("Refit");
+            anonymousAPIClientFileWriter.WriteUsing(codeGeneratorSettings.APIClientSettings.EntitiesNamespace);
+
+            anonymousAPIClientFileWriter.WriteMethod(
+                "InsertApplicationUserAsync",
+                returnType: "Task<ApplicationUserInsertResponse>",
+                parameters: "[Body] ApplicationUserInsertRequest request",
+                attributes: new List<string>() { "Post(\"/api/ApplicationUser/InsertApplicationUser\")" });
+
+            anonymousAPIClientFileWriter.WriteMethod(
+                "LoginAsync",
+                returnType: "Task<LoginResponse>",
+                parameters: "[Body] LoginRequest request",
+                attributes: new List<string>() { "Post(\"/api/ApplicationUser/Login\")" });
+
+            sourceProductionContext.WriteNewCSFile(interfaceAnonymousName, anonymousAPIClientFileWriter);
+
+            var interfaceAuthenticatedName = $"IApplicationUserAuthenticatedClient";
+            var authenticatedAPIClientFileWriter = new CSFileWriter(
+                CSFileWriterType.Interface,
+                codeGeneratorSettings.APIClientSettings?.APIClientNamespace,
+                interfaceAuthenticatedName,
+                isPartial: true,
+                inheritance: "IKangarooAuthenticatedAPIClient");
+
+            authenticatedAPIClientFileWriter.WriteUsing("System");
+            authenticatedAPIClientFileWriter.WriteUsing("System.Threading.Tasks");
+            authenticatedAPIClientFileWriter.WriteUsing("Kangaroo.APIClient");
+            authenticatedAPIClientFileWriter.WriteUsing("Refit");
+            authenticatedAPIClientFileWriter.WriteUsing(codeGeneratorSettings.APIClientSettings.EntitiesNamespace);
+
+            authenticatedAPIClientFileWriter.WriteMethod(
+                "RefreshTokenAsync",
+                returnType: "Task<RefreshTokenResponse>",
+                parameters: "[Body] RefreshTokenRequest request",
+                attributes: new List<string>() { "Post(\"/api/ApplicationUser/RefreshToken\")", "Headers(\"Authorization: Bearer\")" });
+
+            authenticatedAPIClientFileWriter.WriteMethod(
+                "ChangePasswordAsync",
+                returnType: "Task<ChangePasswordResponse>",
+                parameters: "[Body] ChangePasswordRequest request",
+                attributes: new List<string>() { "Post(\"/api/ApplicationUser/ChangePassword\")", "Headers(\"Authorization: Bearer\")" });
+
+            sourceProductionContext.WriteNewCSFile(interfaceAuthenticatedName, authenticatedAPIClientFileWriter);
         }
 
         private static void WriteEntityHandlerAPIClient(

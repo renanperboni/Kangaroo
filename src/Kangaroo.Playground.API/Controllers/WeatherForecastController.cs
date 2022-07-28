@@ -13,8 +13,9 @@ namespace Kangaroo.Playground.API.Controllers
 
         private readonly ILogger<WeatherForecastController> _logger;
 
-        public WeatherForecastController(ILogger<WeatherForecastController> logger)
+        public WeatherForecastController(ILogger<WeatherForecastController> logger, CancellationToken cancellationToken)
         {
+            cancellationToken.ThrowIfCancellationRequested();
             _logger = logger;
         }
 

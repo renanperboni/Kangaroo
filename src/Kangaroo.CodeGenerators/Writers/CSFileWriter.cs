@@ -90,7 +90,7 @@ namespace Kangaroo.CodeGenerators.Writers
             });
         }
 
-        public void WriteProperty(string type, string name, string value = "", bool isFullProperty = true, bool isVirtual = false, bool hasNotifyPropertyChanged = false, List<string> attributes = null)
+        public void WriteProperty(string type, string name, string value = "", bool isFullProperty = true, bool hasNotifyPropertyChanged = false, bool isVirtual = false, List<string> attributes = null)
         {
             if (attributes == null)
             {
@@ -189,6 +189,9 @@ namespace Kangaroo.CodeGenerators.Writers
             if (!this.wasNotifyPropertyChangedStructureAdded)
             {
                 this.wasNotifyPropertyChangedStructureAdded = true;
+
+                this.WriteUsing("System.ComponentModel");
+                this.WriteUsing("System.Runtime.CompilerServices");
 
                 if (string.IsNullOrEmpty(this.inheritance))
                 {
@@ -308,10 +311,10 @@ namespace Kangaroo.CodeGenerators.Writers
 
         private void WriteFields(StringBuilder stringBuilder)
         {
-            foreach (var field in this.fields.OrderByDescending(x => x.IsReadOnly).ThenBy(x => (int)x.AccessModifierType))
+            foreach (var field in this.fields.OrderByDescending(x => x.IsReadOnly).ThenByDescending(x => (int)x.AccessModifierType))
             {
-                var readOnlyStatement = field.IsReadOnly ? "readonly" : string.Empty;
-                var fieldStatement = $"{this.GetWhiteSpace(2)}{this.GetAccessModifierType(field.AccessModifierType)}{readOnlyStatement} {field.Type} {field.Name}";
+                var readOnlyStatement = field.IsReadOnly ? "readonly " : string.Empty;
+                var fieldStatement = $"{this.GetWhiteSpace(2)}{this.GetAccessModifierType(field.AccessModifierType)}{readOnlyStatement}{field.Type} {field.Name}";
 
                 if (string.IsNullOrEmpty(field.Value))
                 {
@@ -429,6 +432,7 @@ namespace Kangaroo.CodeGenerators.Writers
                 if (property.IsFullProperty)
                 {
                     stringBuilder.AppendLine($"{this.GetWhiteSpace(2)}{this.GetAccessModifierType(property.AccessModifierType)}{virtualStatement}{property.Type} {property.Name}");
+                    stringBuilder.AppendLine(this.GetWhiteSpace(2) + "{");
                     stringBuilder.AppendLine($"{this.GetWhiteSpace(3)}get => this.{property.Name.FirstCharToLowerCase()};");
 
                     if (property.HasNotifyPropertyChanged)
@@ -451,6 +455,8 @@ namespace Kangaroo.CodeGenerators.Writers
                     {
                         stringBuilder.AppendLine($"{this.GetWhiteSpace(3)}set => this.{property.Name.FirstCharToLowerCase()} = value;");
                     }
+
+                    stringBuilder.AppendLine(this.GetWhiteSpace(2) + "}");
                 }
                 else
                 {
@@ -522,7 +528,7 @@ namespace Kangaroo.CodeGenerators.Writers
                 methodStatement += string.IsNullOrEmpty(method.Parameters) ? string.Empty : method.Parameters;
                 methodStatement += @")";
 
-                if (method.IsPartial)
+                if (method.IsPartial || this.fileWriterType == CSFileWriterType.Interface)
                 {
                     methodStatement += @";";
                 }
@@ -534,7 +540,7 @@ namespace Kangaroo.CodeGenerators.Writers
 
                 stringBuilder.AppendLine(methodStatement);
 
-                if (!method.IsPartial)
+                if (!method.IsPartial && this.fileWriterType != CSFileWriterType.Interface)
                 {
                     stringBuilder.AppendLine(this.GetWhiteSpace(2) + @"{");
 

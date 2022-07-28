@@ -13,18 +13,21 @@
 	
 	<BackendEntititesSettings 
 		EntitiesNamespace="Kangaroo.Playground.Entities"
-		ValidatorsNamespace="Kangaroo.Playground.Entities.Validators"/>
+		ValidatorsNamespace="Kangaroo.Playground.Entities.Validators"
+		GenerateIdentityEntities="true"/>
 
 	<ServicesSettings
 		ServicesNamespace="Kangaroo.Playground.Services"
 		DbContextNamespace="Kangaroo.Playground.Infrastructure.DatabaseRepositories.DBContexts"
 		DatabaseRepositoriesNamespace="Kangaroo.Playground.Infrastructure.DatabaseRepositories"
 		DatabaseEntitiesNamespace="Kangaroo.Playground.Infrastructure.DatabaseEntities"
-		EntitiesNamespace="Kangaroo.Playground.Entities"/>
+		EntitiesNamespace="Kangaroo.Playground.Entities"
+		GenerateIdentityServiceBasedOnCustomUserClass="ApplicationUser"/>
 
 	<APISettings
 		ControllersNamespace="Kangaroo.Playground.API.Controllers"
 		ServicesNamespace="Kangaroo.Playground.Services"
-		EntitiesNamespace="Kangaroo.Playground.Entities"/>
+		EntitiesNamespace="Kangaroo.Playground.Entities"
+		GenerateIdentityController="true"/>
 	
 </CodeGeneratorSettings>

@@ -8,7 +8,7 @@ namespace Kangaroo.Services
     using Kangaroo.Models;
     using Kangaroo.Models.Entities;
 
-    public abstract class EntityHandlerService<TEntity, TEntityHandlerRequest, TEntityHandlerResponse> : IEntityHandlerService<TEntity, TEntityHandlerRequest, TEntityHandlerResponse>
+    public abstract class EntityHandlerService<TEntity, TEntityHandlerRequest, TEntityHandlerResponse> : ServiceBase, IEntityHandlerService<TEntity, TEntityHandlerRequest, TEntityHandlerResponse>
         where TEntity : class, IEntity
         where TEntityHandlerRequest : class, IEntityHandlerRequest<TEntity>
         where TEntityHandlerResponse : class, IEntityHandlerResponse<TEntity>, new()
@@ -32,12 +32,12 @@ namespace Kangaroo.Services
                 if (dataState.DataState == DataState.Inserted)
                 {
                     auditLog.CreatedAt = DateTimeOffset.Now;
-                    auditLog.CreatedByUserName = this.currentUserService.GetCurrentUserName();
+                    auditLog.CreatedByUserName = this.currentUserService.GetCurrentUserNameToAudit();
                 }
                 else if (dataState.DataState == DataState.Updated)
                 {
                     auditLog.UpdatedAt = DateTimeOffset.Now;
-                    auditLog.UpdatedByUserName = this.currentUserService.GetCurrentUserName();
+                    auditLog.UpdatedByUserName = this.currentUserService.GetCurrentUserNameToAudit();
                 }
             }
 

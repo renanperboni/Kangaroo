@@ -33,9 +33,14 @@ namespace Kangaroo.CodeGenerators.CodeWriters
                     }
                 }
             }
+
+            if (codeGeneratorSettings.APISettings?.GenerateIdentityController == true)
+            {
+                GenerateIdentityController(codeGeneratorSettings, sourceProductionContext);
+            }
         }
 
-        public static void GenerateControllers(CodeGeneratorSettings codeGeneratorSettings, SourceProductionContext sourceProductionContext, Entity entity)
+        private static void GenerateControllers(CodeGeneratorSettings codeGeneratorSettings, SourceProductionContext sourceProductionContext, Entity entity)
         {
             if (entity.GenerateEntityHandlerRequest?.GenerateController != null)
             {
@@ -53,7 +58,7 @@ namespace Kangaroo.CodeGenerators.CodeWriters
             }
         }
 
-        public static void GenerateControllers(CodeGeneratorSettings codeGeneratorSettings, SourceProductionContext sourceProductionContext, Summary summary)
+        private static void GenerateControllers(CodeGeneratorSettings codeGeneratorSettings, SourceProductionContext sourceProductionContext, Summary summary)
         {
             if (summary.GenerateSummaryGetterRequest?.GenerateController != null)
             {
@@ -64,6 +69,68 @@ namespace Kangaroo.CodeGenerators.CodeWriters
             {
                 WriteSummariesGetterController(codeGeneratorSettings, sourceProductionContext, summary);
             }
+        }
+
+        private static void GenerateIdentityController(CodeGeneratorSettings codeGeneratorSettings, SourceProductionContext sourceProductionContext)
+        {
+            var className = $"ApplicationUserController";
+            var controllerFileWriter = new CSFileWriter(
+                CSFileWriterType.Class,
+                codeGeneratorSettings.APISettings?.ControllersNamespace,
+                className,
+                isPartial: true,
+                inheritance: "ControllerBase");
+
+            controllerFileWriter.WriteClassAttribute("ApiController");
+            controllerFileWriter.WriteClassAttribute("Route(\"/api/[controller]/[action]\")");
+
+            controllerFileWriter.WriteUsing("System");
+            controllerFileWriter.WriteUsing("System.Threading.Tasks");
+            controllerFileWriter.WriteUsing("Microsoft.AspNetCore.Authorization");
+            controllerFileWriter.WriteUsing("Microsoft.AspNetCore.Mvc");
+            controllerFileWriter.WriteUsing(codeGeneratorSettings.APISettings?.ServicesNamespace);
+            controllerFileWriter.WriteUsing(codeGeneratorSettings.APISettings?.EntitiesNamespace);
+
+            var serviceInterfaceName = "applicationUserService";
+            controllerFileWriter.WriteDependencyInjection("IApplicationUserService", serviceInterfaceName);
+
+            var insertApplicationUserMethodLines = new List<string>();
+            insertApplicationUserMethodLines.Add($"return Ok(await this.{serviceInterfaceName}.InsertApplicationUserAsync(request, cancellationToken));");
+            controllerFileWriter.WriteMethod(
+                "InsertApplicationUserAsync",
+                returnType: "async Task<IActionResult>",
+                parameters: "[FromBody] ApplicationUserInsertRequest request, CancellationToken cancellationToken = default",
+                attributes: new List<string>() { "HttpPost", "AllowAnonymous" },
+                bodyLines: insertApplicationUserMethodLines);
+
+            var loginMethodLines = new List<string>();
+            loginMethodLines.Add($"return Ok(await this.{serviceInterfaceName}.LoginAsync(request, cancellationToken));");
+            controllerFileWriter.WriteMethod(
+                "LoginAsync",
+                returnType: "async Task<IActionResult>",
+                parameters: "[FromBody] LoginRequest request, CancellationToken cancellationToken = default",
+                attributes: new List<string>() { "HttpPost", "AllowAnonymous" },
+                bodyLines: loginMethodLines);
+
+            var refreshTokenMethodLines = new List<string>();
+            refreshTokenMethodLines.Add($"return Ok(await this.{serviceInterfaceName}.RefreshTokenAsync(request, cancellationToken));");
+            controllerFileWriter.WriteMethod(
+                "RefreshTokenAsync",
+                returnType: "async Task<IActionResult>",
+                parameters: "[FromBody] RefreshTokenRequest request, CancellationToken cancellationToken = default",
+                attributes: new List<string>() { "HttpPost", "Authorize()" },
+                bodyLines: refreshTokenMethodLines);
+
+            var changePasswordMethodLines = new List<string>();
+            changePasswordMethodLines.Add($"return Ok(await this.{serviceInterfaceName}.ChangePasswordAsync(request, cancellationToken));");
+            controllerFileWriter.WriteMethod(
+                "ChangePasswordAsync",
+                returnType: "async Task<IActionResult>",
+                parameters: "[FromBody] ChangePasswordRequest request, CancellationToken cancellationToken = default",
+                attributes: new List<string>() { "HttpPost", "Authorize()" },
+                bodyLines: changePasswordMethodLines);
+
+            sourceProductionContext.WriteNewCSFile(className, controllerFileWriter);
         }
 
         private static void WriteEntityHandlerController(
@@ -142,9 +209,9 @@ namespace Kangaroo.CodeGenerators.CodeWriters
             }
 
             controllerFileWriter.WriteMethod(
-                "Post",
+                "PostAsync",
                 returnType: "async Task<IActionResult>",
-                parameters: $"[FromBody] {entityName}HandlerRequest request, CancellationToken cancellationToken",
+                parameters: $"[FromBody] {entityName}HandlerRequest request, CancellationToken cancellationToken = default",
                 attributes: attributes,
                 bodyLines: bodyLines);
 
@@ -227,9 +294,9 @@ namespace Kangaroo.CodeGenerators.CodeWriters
             }
 
             controllerFileWriter.WriteMethod(
-                "Get",
+                "GetAsync",
                 returnType: "async Task<IActionResult>",
-                parameters: $"[FromQuery] {entityName}GetterRequest request, CancellationToken cancellationToken",
+                parameters: $"[FromQuery] {entityName}GetterRequest request, CancellationToken cancellationToken = default",
                 attributes: attributes,
                 bodyLines: bodyLines);
 
@@ -312,9 +379,9 @@ namespace Kangaroo.CodeGenerators.CodeWriters
             }
 
             controllerFileWriter.WriteMethod(
-                "Get",
+                "GetAsync",
                 returnType: "async Task<IActionResult>",
-                parameters: $"[FromQuery] {entityName}GetterRequest request, CancellationToken cancellationToken",
+                parameters: $"[FromQuery] {entityName}GetterRequest request, CancellationToken cancellationToken = default",
                 attributes: attributes,
                 bodyLines: bodyLines);
 
@@ -397,9 +464,9 @@ namespace Kangaroo.CodeGenerators.CodeWriters
             }
 
             controllerFileWriter.WriteMethod(
-                "Get",
+                "GetAsync",
                 returnType: "async Task<IActionResult>",
-                parameters: $"[FromQuery] {summaryName}GetterRequest request, CancellationToken cancellationToken",
+                parameters: $"[FromQuery] {summaryName}GetterRequest request, CancellationToken cancellationToken = default",
                 attributes: attributes,
                 bodyLines: bodyLines);
 
@@ -482,9 +549,9 @@ namespace Kangaroo.CodeGenerators.CodeWriters
             }
 
             controllerFileWriter.WriteMethod(
-                "Get",
+                "GetAsync",
                 returnType: "async Task<IActionResult>",
-                parameters: $"[FromQuery] {summaryName}GetterRequest request, CancellationToken cancellationToken",
+                parameters: $"[FromQuery] {summaryName}GetterRequest request, CancellationToken cancellationToken = default",
                 attributes: attributes,
                 bodyLines: bodyLines);
 

@@ -7,7 +7,7 @@ namespace Kangaroo.Services
     using System.Threading.Tasks;
     using Kangaroo.Models.Entities;
 
-    public abstract class EntityGetterService<TEntity, TEntityGetterRequest, TEntityGetterResponse> : IEntityGetterService<TEntity, TEntityGetterRequest, TEntityGetterResponse>
+    public abstract class EntityGetterService<TEntity, TEntityGetterRequest, TEntityGetterResponse> : ServiceBase, IEntityGetterService<TEntity, TEntityGetterRequest, TEntityGetterResponse>
         where TEntity : class, IEntity, new()
         where TEntityGetterRequest : class, IEntityGetterRequest
         where TEntityGetterResponse : class, IEntityGetterResponse<TEntity>, new()

@@ -7,7 +7,7 @@ namespace Kangaroo.Services
     using System.Threading.Tasks;
     using Kangaroo.Models.Entities;
 
-    public abstract class SummariesGetterService<TSummary, TSummariesGetterRequest, TSummariesGetterResponse> : ISummariesGetterService<TSummary, TSummariesGetterRequest, TSummariesGetterResponse>
+    public abstract class SummariesGetterService<TSummary, TSummariesGetterRequest, TSummariesGetterResponse> : ServiceBase, ISummariesGetterService<TSummary, TSummariesGetterRequest, TSummariesGetterResponse>
         where TSummary : class, ISummary, new()
         where TSummariesGetterRequest : class, ISummariesGetterRequest
         where TSummariesGetterResponse : class, ISummariesGetterResponse<TSummary>, new()

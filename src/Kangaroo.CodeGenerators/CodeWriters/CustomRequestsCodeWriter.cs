@@ -35,7 +35,7 @@ namespace Kangaroo.CodeGenerators.CodeWriters
             }
         }
 
-        public static void WriteRequest(CodeGeneratorSettings codeGeneratorSettings, SourceProductionContext sourceProductionContext, CustomRequest customRequest, bool isBackend)
+        private static void WriteRequest(CodeGeneratorSettings codeGeneratorSettings, SourceProductionContext sourceProductionContext, CustomRequest customRequest, bool isBackend)
         {
             var className = $"{customRequest.Name}Request";
             var currentLocation = isBackend ? Structure.Location.Backend : Structure.Location.Frontend;
@@ -144,7 +144,7 @@ namespace Kangaroo.CodeGenerators.CodeWriters
             }
         }
 
-        private static Action<object> WriteField(CSFileWriter fileWriter, CSFileWriter validatorFileWriter, bool isFullProperty, Structure.Location location)
+        private static Action<object> WriteField(CSFileWriter fileWriter, CSFileWriter validatorFileWriter, bool hasNotifyPropertyChanged, Structure.Location location)
         {
             return x =>
             {
@@ -199,7 +199,7 @@ namespace Kangaroo.CodeGenerators.CodeWriters
                         }
                     }
 
-                    fileWriter.WriteProperty(fieldType, field.Name, value: fieldValue, isFullProperty: isFullProperty, attributes: attributes);
+                    fileWriter.WriteProperty(fieldType, field.Name, value: fieldValue, hasNotifyPropertyChanged: hasNotifyPropertyChanged, attributes: attributes);
                 }
             };
         }

@@ -48,9 +48,19 @@ namespace Kangaroo.CodeGenerators.CodeWriters
                     }
                 }
             }
+
+            if (codeGeneratorSettings.BackendEntititesSettings?.GenerateIdentityEntities == true)
+            {
+                GenerateIdentityEntities(codeGeneratorSettings, sourceProductionContext, true);
+            }
+
+            if (codeGeneratorSettings.FrontendEntititesSettings?.GenerateIdentityEntities == true)
+            {
+                GenerateIdentityEntities(codeGeneratorSettings, sourceProductionContext, false);
+            }
         }
 
-        public static void GenerateEntities(CodeGeneratorSettings codeGeneratorSettings, SourceProductionContext sourceProductionContext, Entity entity, bool isBackend)
+        private static void GenerateEntities(CodeGeneratorSettings codeGeneratorSettings, SourceProductionContext sourceProductionContext, Entity entity, bool isBackend)
         {
             WriteEntity(
                 codeGeneratorSettings,
@@ -181,7 +191,7 @@ namespace Kangaroo.CodeGenerators.CodeWriters
             }
         }
 
-        public static void GenerateSummaries(CodeGeneratorSettings codeGeneratorSettings, SourceProductionContext sourceProductionContext, Summary summary, bool isBackend)
+        private static void GenerateSummaries(CodeGeneratorSettings codeGeneratorSettings, SourceProductionContext sourceProductionContext, Summary summary, bool isBackend)
         {
             WriteEntity(
                 codeGeneratorSettings,
@@ -279,6 +289,243 @@ namespace Kangaroo.CodeGenerators.CodeWriters
                     fields: null,
                     isBackend: isBackend);
             }
+        }
+
+        private static void GenerateIdentityEntities(CodeGeneratorSettings codeGeneratorSettings, SourceProductionContext sourceProductionContext, bool isBackend)
+        {
+            WriteRequestResponse(
+                codeGeneratorSettings,
+                sourceProductionContext,
+                className: "ApplicationUserInsertRequest",
+                inheritance: $"IRequest",
+                entityPropertyType: string.Empty,
+                entityPropertyName: string.Empty,
+                entityPropertyValue: string.Empty,
+                entityPropertyHasValidator: false,
+                additionalUsings: null,
+                customAttributes: null,
+                fields: new Fields()
+                {
+                    StringField = new List<StringField>()
+                    {
+                        new StringField()
+                        {
+                            Name = "Name",
+                            IsRequired = true,
+                            MaxLength = 255,
+                        },
+                        new StringField()
+                        {
+                            Name = "Email",
+                            IsRequired = true,
+                            MaxLength = 255,
+                        },
+                        new StringField()
+                        {
+                            Name = "Password",
+                            IsRequired = true,
+                            MaxLength = 255,
+                        },
+                    },
+                },
+                isBackend: isBackend);
+
+            WriteRequestResponse(
+                codeGeneratorSettings,
+                sourceProductionContext,
+                className: "ApplicationUserInsertResponse",
+                inheritance: $"IResponse",
+                entityPropertyType: string.Empty,
+                entityPropertyName: string.Empty,
+                entityPropertyValue: string.Empty,
+                entityPropertyHasValidator: false,
+                additionalUsings: null,
+                customAttributes: null,
+                fields: new Fields()
+                {
+                    BoolField = new List<BoolField>()
+                    {
+                        new BoolField()
+                        {
+                            Name = "WasUserInserted",
+                            IsRequired = true,
+                        },
+                    },
+                },
+                isBackend: isBackend);
+
+            WriteRequestResponse(
+                codeGeneratorSettings,
+                sourceProductionContext,
+                className: "LoginRequest",
+                inheritance: $"IRequest",
+                entityPropertyType: string.Empty,
+                entityPropertyName: string.Empty,
+                entityPropertyValue: string.Empty,
+                entityPropertyHasValidator: false,
+                additionalUsings: null,
+                customAttributes: null,
+                fields: new Fields()
+                {
+                    StringField = new List<StringField>()
+                    {
+                        new StringField()
+                        {
+                            Name = "Email",
+                            IsRequired = true,
+                            MaxLength = 255,
+                        },
+                        new StringField()
+                        {
+                            Name = "Password",
+                            IsRequired = true,
+                            MaxLength = 255,
+                        },
+                    },
+                },
+                isBackend: isBackend);
+
+            WriteRequestResponse(
+                codeGeneratorSettings,
+                sourceProductionContext,
+                className: "LoginResponse",
+                inheritance: $"IResponse",
+                entityPropertyType: string.Empty,
+                entityPropertyName: string.Empty,
+                entityPropertyValue: string.Empty,
+                entityPropertyHasValidator: false,
+                additionalUsings: null,
+                customAttributes: null,
+                fields: new Fields()
+                {
+                    StringField = new List<StringField>()
+                    {
+                        new StringField()
+                        {
+                            Name = "Token",
+                            IsRequired = true,
+                        },
+                        new StringField()
+                        {
+                            Name = "RefreshToken",
+                            IsRequired = true,
+                        },
+                    },
+                },
+                isBackend: isBackend);
+
+            WriteRequestResponse(
+                codeGeneratorSettings,
+                sourceProductionContext,
+                className: "RefreshTokenRequest",
+                inheritance: $"IRequest",
+                entityPropertyType: string.Empty,
+                entityPropertyName: string.Empty,
+                entityPropertyValue: string.Empty,
+                entityPropertyHasValidator: false,
+                additionalUsings: null,
+                customAttributes: null,
+                fields: new Fields()
+                {
+                    StringField = new List<StringField>()
+                    {
+                        new StringField()
+                        {
+                            Name = "Token",
+                            IsRequired = true,
+                        },
+                        new StringField()
+                        {
+                            Name = "RefreshToken",
+                            IsRequired = true,
+                        },
+                    },
+                },
+                isBackend: isBackend);
+
+            WriteRequestResponse(
+                codeGeneratorSettings,
+                sourceProductionContext,
+                className: "RefreshTokenResponse",
+                inheritance: $"IResponse",
+                entityPropertyType: string.Empty,
+                entityPropertyName: string.Empty,
+                entityPropertyValue: string.Empty,
+                entityPropertyHasValidator: false,
+                additionalUsings: null,
+                customAttributes: null,
+                fields: new Fields()
+                {
+                    StringField = new List<StringField>()
+                    {
+                        new StringField()
+                        {
+                            Name = "Token",
+                            IsRequired = true,
+                        },
+                        new StringField()
+                        {
+                            Name = "RefreshToken",
+                            IsRequired = true,
+                        },
+                    },
+                },
+                isBackend: isBackend);
+
+            WriteRequestResponse(
+                codeGeneratorSettings,
+                sourceProductionContext,
+                className: "ChangePasswordRequest",
+                inheritance: $"IRequest",
+                entityPropertyType: string.Empty,
+                entityPropertyName: string.Empty,
+                entityPropertyValue: string.Empty,
+                entityPropertyHasValidator: false,
+                additionalUsings: null,
+                customAttributes: null,
+                fields: new Fields()
+                {
+                    StringField = new List<StringField>()
+                    {
+                        new StringField()
+                        {
+                            Name = "CurrentPassword",
+                            IsRequired = true,
+                            MaxLength = 255,
+                        },
+                        new StringField()
+                        {
+                            Name = "NewPassword",
+                            IsRequired = true,
+                            MaxLength = 255,
+                        },
+                    },
+                },
+                isBackend: isBackend);
+
+            WriteRequestResponse(
+                codeGeneratorSettings,
+                sourceProductionContext,
+                className: "ChangePasswordResponse",
+                inheritance: $"IResponse",
+                entityPropertyType: string.Empty,
+                entityPropertyName: string.Empty,
+                entityPropertyValue: string.Empty,
+                entityPropertyHasValidator: false,
+                additionalUsings: null,
+                customAttributes: null,
+                fields: new Fields()
+                {
+                    BoolField = new List<BoolField>()
+                    {
+                        new BoolField()
+                        {
+                            Name = "WasPasswordChanged",
+                            IsRequired = true,
+                        },
+                    },
+                },
+                isBackend: isBackend);
         }
 
         private static void WriteEntity(
@@ -379,21 +626,21 @@ namespace Kangaroo.CodeGenerators.CodeWriters
 
             if (includeRowVersionControl)
             {
-                entityFileWriter.WriteProperty("byte[]", "RowVersion", isFullProperty: shouldGenerateNotifyPropertyChanges, isVirtual: false);
+                entityFileWriter.WriteProperty("byte[]", "RowVersion", hasNotifyPropertyChanged: shouldGenerateNotifyPropertyChanges, isVirtual: false);
             }
 
             if (includeAuditLog)
             {
-                entityFileWriter.WriteProperty("string", "CreatedByUserName", isFullProperty: shouldGenerateNotifyPropertyChanges, isVirtual: false);
-                entityFileWriter.WriteProperty("DateTimeOffset", "CreatedAt", isFullProperty: shouldGenerateNotifyPropertyChanges, isVirtual: false);
+                entityFileWriter.WriteProperty("string", "CreatedByUserName", hasNotifyPropertyChanged: shouldGenerateNotifyPropertyChanges, isVirtual: false);
+                entityFileWriter.WriteProperty("DateTimeOffset", "CreatedAt", hasNotifyPropertyChanged: shouldGenerateNotifyPropertyChanges, isVirtual: false);
 
-                entityFileWriter.WriteProperty("string", "UpdatedByUserName", isFullProperty: shouldGenerateNotifyPropertyChanges, isVirtual: false);
-                entityFileWriter.WriteProperty("DateTimeOffset?", "UpdatedAt", isFullProperty: shouldGenerateNotifyPropertyChanges, isVirtual: false);
+                entityFileWriter.WriteProperty("string", "UpdatedByUserName", hasNotifyPropertyChanged: shouldGenerateNotifyPropertyChanges, isVirtual: false);
+                entityFileWriter.WriteProperty("DateTimeOffset?", "UpdatedAt", hasNotifyPropertyChanged: shouldGenerateNotifyPropertyChanges, isVirtual: false);
             }
 
             if (includeDataState)
             {
-                entityFileWriter.WriteProperty("DataState", "DataState", isFullProperty: shouldGenerateNotifyPropertyChanges, isVirtual: false);
+                entityFileWriter.WriteProperty("DataState", "DataState", hasNotifyPropertyChanged: shouldGenerateNotifyPropertyChanges, isVirtual: false);
             }
 
             WriteKeyField(keyField, entityFileWriter, currentLocation);
@@ -467,7 +714,7 @@ namespace Kangaroo.CodeGenerators.CodeWriters
 
             if (!string.IsNullOrEmpty(entityPropertyName))
             {
-                fileWriter.WriteProperty(type: entityPropertyType, name: entityPropertyName, value: entityPropertyValue, isFullProperty: shouldGenerateNotifyPropertyChanges);
+                fileWriter.WriteProperty(type: entityPropertyType, name: entityPropertyName, value: entityPropertyValue, hasNotifyPropertyChanged: shouldGenerateNotifyPropertyChanges);
 
                 if (entityPropertyHasValidator)
                 {
@@ -517,7 +764,7 @@ namespace Kangaroo.CodeGenerators.CodeWriters
             }
         }
 
-        private static Action<object> WriteField(CSFileWriter fileWriter, CSFileWriter validatorFileWriter, bool isFullProperty, Structure.Location location)
+        private static Action<object> WriteField(CSFileWriter fileWriter, CSFileWriter validatorFileWriter, bool hasNotifyPropertyChanged, Structure.Location location)
         {
             return x =>
             {
@@ -577,7 +824,7 @@ namespace Kangaroo.CodeGenerators.CodeWriters
                         }
                     }
 
-                    fileWriter.WriteProperty(fieldType, field.Name, value: fieldValue, isFullProperty: isFullProperty, attributes: attributes);
+                    fileWriter.WriteProperty(fieldType, field.Name, value: fieldValue, hasNotifyPropertyChanged: hasNotifyPropertyChanged, attributes: attributes);
                 }
             };
         }

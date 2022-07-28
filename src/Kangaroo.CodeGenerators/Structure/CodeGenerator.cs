@@ -232,7 +232,7 @@ namespace Kangaroo.CodeGenerators.Structure
     {
         [XmlAttribute]
         [DefaultValue("")]
-        public string DatabaseEntityName { get; set; } = "";
+        public string DatabaseEntityName { get; set; } = string.Empty;
 
         [XmlAttribute]
         [DefaultValue(AutoMapperSourceType.Entity)]
@@ -348,11 +348,11 @@ namespace Kangaroo.CodeGenerators.Structure
     {
         [XmlAttribute]
         [DefaultValue("")]
-        public string UseExistingInterfaceServiceName { get; set; } = "";
+        public string UseExistingInterfaceServiceName { get; set; } = string.Empty;
 
         [XmlAttribute]
         [DefaultValue("")]
-        public string UseExistingServiceMethodName { get; set; } = "";
+        public string UseExistingServiceMethodName { get; set; } = string.Empty;
 
         [XmlAttribute]
         [DefaultValue(true)]
@@ -377,7 +377,7 @@ namespace Kangaroo.CodeGenerators.Structure
     {
         [XmlAttribute]
         [DefaultValue("")]
-        public string DatabaseEntityName { get; set; } = "";
+        public string DatabaseEntityName { get; set; } = string.Empty;
 
         [XmlAttribute]
         [DefaultValue(true)]
@@ -566,7 +566,7 @@ namespace Kangaroo.CodeGenerators.Structure
 
         [XmlAttribute]
         [DefaultValue("")]
-        public string DefaultValue { get; set; } = "";
+        public string DefaultValue { get; set; } = string.Empty;
 
         [XmlAttribute]
         [DefaultValue(255)]
@@ -745,7 +745,7 @@ namespace Kangaroo.CodeGenerators.Structure
 
         [XmlAttribute]
         [DefaultValue("")]
-        public string IsSummaryFor { get; set; } = "";
+        public string IsSummaryFor { get; set; } = string.Empty;
 
         [XmlElement]
         public CustomAttributes CustomAttributes { get; set; }
@@ -770,7 +770,7 @@ namespace Kangaroo.CodeGenerators.Structure
 
         [XmlAttribute]
         [DefaultValue("")]
-        public string IsEnumFor { get; set; } = "";
+        public string IsEnumFor { get; set; } = string.Empty;
 
         [XmlElement]
         public CustomAttributes CustomAttributes { get; set; }
@@ -866,7 +866,7 @@ namespace Kangaroo.CodeGenerators.Structure
 
         [XmlAttribute]
         [DefaultValue("")]
-        public string DefaultValue { get; set; } = "";
+        public string DefaultValue { get; set; } = string.Empty;
     }
     #endregion Enums
 

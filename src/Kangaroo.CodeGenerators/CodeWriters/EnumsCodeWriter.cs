@@ -34,7 +34,7 @@ namespace Kangaroo.CodeGenerators.CodeWriters
             }
         }
 
-        public static void WriteEnum(CodeGeneratorSettings codeGeneratorSettings, SourceProductionContext sourceProductionContext, EnumEntity enumEntity, bool isBackend)
+        private static void WriteEnum(CodeGeneratorSettings codeGeneratorSettings, SourceProductionContext sourceProductionContext, EnumEntity enumEntity, bool isBackend)
         {
             var currentLocation = isBackend ? Structure.Location.Backend : Structure.Location.Frontend;
             var enumEntityNamespace = isBackend ? codeGeneratorSettings.BackendEnumsSettings?.EnumsNamespace : codeGeneratorSettings.FrontendEnumsSettings?.EnumsNamespace;

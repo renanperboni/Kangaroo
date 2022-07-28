@@ -5,12 +5,12 @@ namespace Kangaroo.Services
 {
     public interface ICurrentUserService : IScopedService
     {
-        public int GetCurrentUserId();
+        public string CurrentUserId { get; }
 
-        public Guid GetCurrentUserGuid();
+        public string CurrentUserName { get; }
 
-        public string GetCurrentUserName();
+        public string CurrentUserEmail { get; }
 
-        public string GetCurrentUserLogin();
+        public string GetCurrentUserNameToAudit();
     }
 }

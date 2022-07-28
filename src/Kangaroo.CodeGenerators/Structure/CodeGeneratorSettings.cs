@@ -72,6 +72,10 @@ namespace Kangaroo.CodeGenerators.Structure
 
 		[XmlAttribute]
 		public string ValidatorsNamespace { get; set; }
+
+		[XmlAttribute]
+		[DefaultValue(true)]
+		public bool GenerateIdentityEntities { get; set; } = true;
 	}
 
 	[XmlRoot]
@@ -86,6 +90,10 @@ namespace Kangaroo.CodeGenerators.Structure
 		[XmlAttribute]
 		[DefaultValue(true)]
 		public bool GenerateNotifyPropertyChanges { get; set; } = true;
+
+		[XmlAttribute]
+		[DefaultValue(true)]
+		public bool GenerateIdentityEntities { get; set; } = true;
 	}
 
 	[XmlRoot]
@@ -206,6 +214,10 @@ namespace Kangaroo.CodeGenerators.Structure
 		[XmlAttribute]
 		[DefaultValue("Tb")]
 		public string DatabaseEntityPrefix { get; set; } = "Tb";
+
+		[XmlAttribute]
+		[DefaultValue("")]
+		public string GenerateIdentityServiceBasedOnCustomUserClass { get; set; } = string.Empty;
 	}
 
 	[XmlRoot]
@@ -219,6 +231,10 @@ namespace Kangaroo.CodeGenerators.Structure
 
 		[XmlAttribute]
 		public string EntitiesNamespace { get; set; }
+
+		[XmlAttribute]
+		[DefaultValue(true)]
+		public bool GenerateIdentityController { get; set; } = true;
 	}
 
 	[XmlRoot]
@@ -229,5 +245,9 @@ namespace Kangaroo.CodeGenerators.Structure
 
 		[XmlAttribute]
 		public string EntitiesNamespace { get; set; }
+
+		[XmlAttribute]
+		[DefaultValue(true)]
+		public bool GenerateIdentityAPIClient { get; set; } = true;
 	}
 }

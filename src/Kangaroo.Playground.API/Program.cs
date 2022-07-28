@@ -13,10 +13,12 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+// Was Added
 builder.Services.AddServiceCollection();
 
 var app = builder.Build();
 
+// Was Added
 await app.ConfigureDatabase();
 
 // Configure the HTTP request pipeline.
@@ -26,11 +28,15 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+// Was added
 app.UseKangarooException();
 
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
+
+// Was added
+app.UseAuthentication();
 
 app.MapControllers();
 
