@@ -7,12 +7,10 @@ namespace Kangaroo.Exceptions
     using System.Collections.Generic;
     using System.Text;
 
-    public class KangarooExceptionInfo
+    public enum KangarooErrorCode
     {
-        public KangarooErrorCode InternalErrorCode { get; set; }
-
-        public int? ErrorCode { get; set; }
-
-        public string AdditionalInfo { get; set; }
+        Others = 0,
+        SecurityValidation = 1,
+        InvalidPassword = 2,
     }
 }

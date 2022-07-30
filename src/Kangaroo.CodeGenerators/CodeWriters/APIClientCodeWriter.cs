@@ -34,9 +34,9 @@ namespace Kangaroo.CodeGenerators.CodeWriters
                 }
             }
 
-            if (codeGeneratorSettings.APIClientSettings?.GenerateIdentityAPIClient == true)
+            if (codeGeneratorSettings.APIClientSettings?.GenerateAuthAPIClient == true)
             {
-                GenerateIdentityAPIClient(codeGeneratorSettings, sourceProductionContext);
+                GenerateAuthAPIClient(codeGeneratorSettings, sourceProductionContext);
             }
         }
 
@@ -71,9 +71,9 @@ namespace Kangaroo.CodeGenerators.CodeWriters
             }
         }
 
-        private static void GenerateIdentityAPIClient(CodeGeneratorSettings codeGeneratorSettings, SourceProductionContext sourceProductionContext)
+        private static void GenerateAuthAPIClient(CodeGeneratorSettings codeGeneratorSettings, SourceProductionContext sourceProductionContext)
         {
-            var interfaceAnonymousName = $"IApplicationUserAnonymousClient";
+            var interfaceAnonymousName = $"IAuthAnonymousClient";
             var anonymousAPIClientFileWriter = new CSFileWriter(
                 CSFileWriterType.Interface,
                 codeGeneratorSettings.APIClientSettings?.APIClientNamespace,
@@ -91,17 +91,17 @@ namespace Kangaroo.CodeGenerators.CodeWriters
                 "InsertApplicationUserAsync",
                 returnType: "Task<ApplicationUserInsertResponse>",
                 parameters: "[Body] ApplicationUserInsertRequest request",
-                attributes: new List<string>() { "Post(\"/api/ApplicationUser/InsertApplicationUser\")" });
+                attributes: new List<string>() { "Post(\"/api/Auth/InsertApplicationUser\")" });
 
             anonymousAPIClientFileWriter.WriteMethod(
                 "LoginAsync",
                 returnType: "Task<LoginResponse>",
                 parameters: "[Body] LoginRequest request",
-                attributes: new List<string>() { "Post(\"/api/ApplicationUser/Login\")" });
+                attributes: new List<string>() { "Post(\"/api/Auth/Login\")" });
 
             sourceProductionContext.WriteNewCSFile(interfaceAnonymousName, anonymousAPIClientFileWriter);
 
-            var interfaceAuthenticatedName = $"IApplicationUserAuthenticatedClient";
+            var interfaceAuthenticatedName = $"IAuthAuthenticatedClient";
             var authenticatedAPIClientFileWriter = new CSFileWriter(
                 CSFileWriterType.Interface,
                 codeGeneratorSettings.APIClientSettings?.APIClientNamespace,
@@ -119,13 +119,19 @@ namespace Kangaroo.CodeGenerators.CodeWriters
                 "RefreshTokenAsync",
                 returnType: "Task<RefreshTokenResponse>",
                 parameters: "[Body] RefreshTokenRequest request",
-                attributes: new List<string>() { "Post(\"/api/ApplicationUser/RefreshToken\")", "Headers(\"Authorization: Bearer\")" });
+                attributes: new List<string>() { "Post(\"/api/Auth/RefreshToken\")", "Headers(\"Authorization: Bearer\")" });
+
+            authenticatedAPIClientFileWriter.WriteMethod(
+                "LogoutAsync",
+                returnType: "Task<LogoutResponse>",
+                parameters: "[Body] LogoutRequest request",
+                attributes: new List<string>() { "Post(\"/api/Auth/Logout\")", "Headers(\"Authorization: Bearer\")" });
 
             authenticatedAPIClientFileWriter.WriteMethod(
                 "ChangePasswordAsync",
                 returnType: "Task<ChangePasswordResponse>",
                 parameters: "[Body] ChangePasswordRequest request",
-                attributes: new List<string>() { "Post(\"/api/ApplicationUser/ChangePassword\")", "Headers(\"Authorization: Bearer\")" });
+                attributes: new List<string>() { "Post(\"/api/Auth/ChangePassword\")", "Headers(\"Authorization: Bearer\")" });
 
             sourceProductionContext.WriteNewCSFile(interfaceAuthenticatedName, authenticatedAPIClientFileWriter);
         }

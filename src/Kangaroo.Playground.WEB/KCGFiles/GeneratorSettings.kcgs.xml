@@ -5,11 +5,11 @@
 	<FrontendEntititesSettings 
 		EntitiesNamespace="Kangaroo.Playground.WEB.Entities"
 		ValidatorsNamespace="Kangaroo.Playground.WEB.Entities.Validators"
-		GenerateIdentityEntities="true"/>
+		GenerateAuthEntities="true"/>
 
 	<APIClientSettings
 		APIClientNamespace="Kangaroo.Playground.WEB.APIClient"
 		EntitiesNamespace="Kangaroo.Playground.WEB.Entities"
-		GenerateIdentityAPIClient="true"/>
+		GenerateAuthAPIClient="true"/>
 	
 </CodeGeneratorSettings>

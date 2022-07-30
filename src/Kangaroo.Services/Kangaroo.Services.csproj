@@ -1,9 +1,8 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
 		<TargetFramework>net6.0</TargetFramework>
 		<ImplicitUsings>enable</ImplicitUsings>
-		<Nullable>enable</Nullable>
 		<LangVersion>latest</LangVersion>
 	</PropertyGroup>
 
@@ -26,16 +25,23 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />
+		<PackageReference Include="Microsoft.IdentityModel.Tokens" Version="6.8.0" />
 		<PackageReference Include="StyleCop.Analyzers" Version="1.1.118">
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 			<PrivateAssets>all</PrivateAssets>
 		</PackageReference>
+		<PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.8.0" />
 	</ItemGroup>
 
 	<ItemGroup>
+	  <ProjectReference Include="..\Kangaroo.Exceptions\Kangaroo.Exceptions.csproj" />
 	  <ProjectReference Include="..\Kangaroo.Infrastructure.DatabaseRepositories\Kangaroo.Infrastructure.DatabaseRepositories.csproj" />
+	  <ProjectReference Include="..\Kangaroo.Models.CacheKeys\Kangaroo.Models.CacheKeys.csproj" />
+	  <ProjectReference Include="..\Kangaroo.Models.Claims\Kangaroo.Models.Claims.csproj" />
 	  <ProjectReference Include="..\Kangaroo.Models.DatabaseEntities\Kangaroo.Models.DatabaseEntities.csproj" />
 	  <ProjectReference Include="..\Kangaroo.Models.Entities\Kangaroo.Models.Entities.csproj" />
+	  <ProjectReference Include="..\Kangaroo.Models.OptionsSettings\Kangaroo.Models.OptionsSettings.csproj" />
 	  <ProjectReference Include="..\Kangaroo.Models\Kangaroo.Models.csproj" />
 	</ItemGroup>
 

@@ -50,17 +50,21 @@ namespace Kangaroo.Playground.API
     using Kangaroo.Exceptions;
     using Kangaroo.API.Middlewares;
     using Kangaroo.API.Extensions;
-    using Kangaroo.Playground.API.Services;
+    using Microsoft.AspNetCore.Authentication.JwtBearer;
+    using Microsoft.IdentityModel.Tokens;
+    using Kangaroo.API.ActionFilters;
+    using Kangaroo.Models.OptionsSettings;
 
     #region API
 
     public static class APIExtensions
     {
-        public static void AddServiceCollection(this IServiceCollection services)
+        public static void AddServiceCollection(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddKangarooServices(typeof(APIExtensions).Assembly);
             services.AddKangarooDatabaseRepositories(typeof(APIExtensions).Assembly);
-            services.AddKangarooCurrentUserService(typeof(CurrentUserService));
+            services.AddKangarooAuthenticationJwt(configuration);
+            services.AddKangarooRedis(configuration);
 
             services.AddDbContext<ApplicationDbContext>(x => x.UseSqlServer("Data Source=(localdb)\\MSSQLLocalDB;Database=MyDbTest;Trusted_Connection=True;",
                     y => y.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery))
@@ -68,8 +72,20 @@ namespace Kangaroo.Playground.API
                 .AddLogging(x => x.AddDebug())
                 .AddAutoMapper(typeof(ApplicationAutoMapperProfile));
 
-            services.AddMvc(x => x.SuppressImplicitRequiredAttributeForNonNullableReferenceTypes = true)
-                .AddFluentValidation();
+            services.AddMvc(x =>
+            {
+                x.Filters.Add(typeof(KangarooAuthorizationActionFilter));
+                x.SuppressImplicitRequiredAttributeForNonNullableReferenceTypes = true;
+            }).AddFluentValidation();
+
+            services.AddCors(policy =>
+            {
+                policy.AddPolicy("CorsPolicy", opt => opt
+                .AllowAnyOrigin()
+                .AllowAnyHeader()
+                .AllowAnyMethod()
+                .WithExposedHeaders("X-Pagination"));
+            });
 
             services.AddValidatorsFromAssembly(typeof(APIExtensions).Assembly);
         }

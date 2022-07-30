@@ -10,8 +10,12 @@ namespace Kangaroo.API.Extensions
     using System.Text;
     using System.Threading.Tasks;
     using Kangaroo.Infrastructure.DatabaseRepositories;
+    using Kangaroo.Models.OptionsSettings;
     using Kangaroo.Services;
+    using Microsoft.AspNetCore.Authentication.JwtBearer;
+    using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
+    using Microsoft.IdentityModel.Tokens;
 
     public static class ServiceCollectionExtensions
     {
@@ -51,9 +55,44 @@ namespace Kangaroo.API.Extensions
                 .WithTransientLifetime());
         }
 
-        public static IServiceCollection AddKangarooCurrentUserService(this IServiceCollection services, Type implementationType)
+        public static IServiceCollection AddKangarooAuthenticationJwt(this IServiceCollection services, IConfiguration configuration)
         {
-            return services.AddTransient(typeof(ICurrentUserService), implementationType);
+            var jwtOptions = new JwtOptions();
+            configuration.GetSection(JwtOptions.Jwt).Bind(jwtOptions);
+
+            var validIssuer = jwtOptions.JwtIssuer;
+            var validAudience = jwtOptions.JwtAudience;
+            var secretKey = jwtOptions.JwtSecurityKey;
+
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(options =>
+                {
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuer = true,
+                        ValidateAudience = true,
+                        ValidateLifetime = true,
+                        ValidateIssuerSigningKey = true,
+                        ValidIssuer = validIssuer,
+                        ValidAudience = validAudience,
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey)),
+                    };
+                });
+
+            return services;
+        }
+
+        public static IServiceCollection AddKangarooRedis(this IServiceCollection services, IConfiguration configuration)
+        {
+            var distributedRedisCacheOptions = new DistributedRedisCacheOptions();
+            configuration.GetSection(DistributedRedisCacheOptions.DistributedRedisCache).Bind(distributedRedisCacheOptions);
+            services.AddDistributedRedisCache(x =>
+            {
+                x.Configuration = distributedRedisCacheOptions.ConnectionString;
+                x.InstanceName = distributedRedisCacheOptions.InstanceName;
+            });
+
+            return services;
         }
     }
 }

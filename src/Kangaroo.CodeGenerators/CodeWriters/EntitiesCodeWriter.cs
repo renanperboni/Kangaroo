@@ -49,14 +49,14 @@ namespace Kangaroo.CodeGenerators.CodeWriters
                 }
             }
 
-            if (codeGeneratorSettings.BackendEntititesSettings?.GenerateIdentityEntities == true)
+            if (codeGeneratorSettings.BackendEntititesSettings?.GenerateAuthEntities == true)
             {
-                GenerateIdentityEntities(codeGeneratorSettings, sourceProductionContext, true);
+                GenerateAuthEntities(codeGeneratorSettings, sourceProductionContext, true);
             }
 
-            if (codeGeneratorSettings.FrontendEntititesSettings?.GenerateIdentityEntities == true)
+            if (codeGeneratorSettings.FrontendEntititesSettings?.GenerateAuthEntities == true)
             {
-                GenerateIdentityEntities(codeGeneratorSettings, sourceProductionContext, false);
+                GenerateAuthEntities(codeGeneratorSettings, sourceProductionContext, false);
             }
         }
 
@@ -291,7 +291,7 @@ namespace Kangaroo.CodeGenerators.CodeWriters
             }
         }
 
-        private static void GenerateIdentityEntities(CodeGeneratorSettings codeGeneratorSettings, SourceProductionContext sourceProductionContext, bool isBackend)
+        private static void GenerateAuthEntities(CodeGeneratorSettings codeGeneratorSettings, SourceProductionContext sourceProductionContext, bool isBackend)
         {
             WriteRequestResponse(
                 codeGeneratorSettings,
@@ -341,17 +341,7 @@ namespace Kangaroo.CodeGenerators.CodeWriters
                 entityPropertyHasValidator: false,
                 additionalUsings: null,
                 customAttributes: null,
-                fields: new Fields()
-                {
-                    BoolField = new List<BoolField>()
-                    {
-                        new BoolField()
-                        {
-                            Name = "WasUserInserted",
-                            IsRequired = true,
-                        },
-                    },
-                },
+                fields: null,
                 isBackend: isBackend);
 
             WriteRequestResponse(
@@ -475,6 +465,34 @@ namespace Kangaroo.CodeGenerators.CodeWriters
             WriteRequestResponse(
                 codeGeneratorSettings,
                 sourceProductionContext,
+                className: "LogoutRequest",
+                inheritance: $"IRequest",
+                entityPropertyType: string.Empty,
+                entityPropertyName: string.Empty,
+                entityPropertyValue: string.Empty,
+                entityPropertyHasValidator: false,
+                additionalUsings: null,
+                customAttributes: null,
+                fields: null,
+                isBackend: isBackend);
+
+            WriteRequestResponse(
+                codeGeneratorSettings,
+                sourceProductionContext,
+                className: "LogoutResponse",
+                inheritance: $"IResponse",
+                entityPropertyType: string.Empty,
+                entityPropertyName: string.Empty,
+                entityPropertyValue: string.Empty,
+                entityPropertyHasValidator: false,
+                additionalUsings: null,
+                customAttributes: null,
+                fields: null,
+                isBackend: isBackend);
+
+            WriteRequestResponse(
+                codeGeneratorSettings,
+                sourceProductionContext,
                 className: "ChangePasswordRequest",
                 inheritance: $"IRequest",
                 entityPropertyType: string.Empty,
@@ -514,17 +532,7 @@ namespace Kangaroo.CodeGenerators.CodeWriters
                 entityPropertyHasValidator: false,
                 additionalUsings: null,
                 customAttributes: null,
-                fields: new Fields()
-                {
-                    BoolField = new List<BoolField>()
-                    {
-                        new BoolField()
-                        {
-                            Name = "WasPasswordChanged",
-                            IsRequired = true,
-                        },
-                    },
-                },
+                fields: null,
                 isBackend: isBackend);
         }
 

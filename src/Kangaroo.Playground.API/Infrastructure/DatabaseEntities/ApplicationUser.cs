@@ -3,12 +3,13 @@
 
 namespace Kangaroo.Playground.Infrastructure.DatabaseEntities
 {
+    using System.ComponentModel.DataAnnotations;
+    using Kangaroo.Models.DatabaseEntities;
     using Microsoft.AspNetCore.Identity;
 
-    public partial class ApplicationUser : IdentityUser
+    public partial class ApplicationUser : IdentityUser, IApplicationUser
     {
-        public string RefreshToken { get; set; }
-
-        public DateTime RefreshTokenExpirationTime { get; set; }
+        [MaxLength(255)]
+        public string FullName { get; set; }
     }
 }

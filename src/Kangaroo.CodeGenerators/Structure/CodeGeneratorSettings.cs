@@ -75,7 +75,7 @@ namespace Kangaroo.CodeGenerators.Structure
 
 		[XmlAttribute]
 		[DefaultValue(true)]
-		public bool GenerateIdentityEntities { get; set; } = true;
+		public bool GenerateAuthEntities { get; set; } = true;
 	}
 
 	[XmlRoot]
@@ -93,7 +93,7 @@ namespace Kangaroo.CodeGenerators.Structure
 
 		[XmlAttribute]
 		[DefaultValue(true)]
-		public bool GenerateIdentityEntities { get; set; } = true;
+		public bool GenerateAuthEntities { get; set; } = true;
 	}
 
 	[XmlRoot]
@@ -217,7 +217,7 @@ namespace Kangaroo.CodeGenerators.Structure
 
 		[XmlAttribute]
 		[DefaultValue("")]
-		public string GenerateIdentityServiceBasedOnCustomUserClass { get; set; } = string.Empty;
+		public string GenerateAuthServiceBasedOnCustomUserClass { get; set; } = string.Empty;
 	}
 
 	[XmlRoot]
@@ -234,7 +234,7 @@ namespace Kangaroo.CodeGenerators.Structure
 
 		[XmlAttribute]
 		[DefaultValue(true)]
-		public bool GenerateIdentityController { get; set; } = true;
+		public bool GenerateAuthController { get; set; } = true;
 	}
 
 	[XmlRoot]
@@ -248,6 +248,6 @@ namespace Kangaroo.CodeGenerators.Structure
 
 		[XmlAttribute]
 		[DefaultValue(true)]
-		public bool GenerateIdentityAPIClient { get; set; } = true;
+		public bool GenerateAuthAPIClient { get; set; } = true;
 	}
 }

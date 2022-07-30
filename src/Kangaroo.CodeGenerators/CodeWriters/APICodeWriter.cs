@@ -34,9 +34,9 @@ namespace Kangaroo.CodeGenerators.CodeWriters
                 }
             }
 
-            if (codeGeneratorSettings.APISettings?.GenerateIdentityController == true)
+            if (codeGeneratorSettings.APISettings?.GenerateAuthController == true)
             {
-                GenerateIdentityController(codeGeneratorSettings, sourceProductionContext);
+                GenerateAuthController(codeGeneratorSettings, sourceProductionContext);
             }
         }
 
@@ -71,9 +71,9 @@ namespace Kangaroo.CodeGenerators.CodeWriters
             }
         }
 
-        private static void GenerateIdentityController(CodeGeneratorSettings codeGeneratorSettings, SourceProductionContext sourceProductionContext)
+        private static void GenerateAuthController(CodeGeneratorSettings codeGeneratorSettings, SourceProductionContext sourceProductionContext)
         {
-            var className = $"ApplicationUserController";
+            var className = $"AuthController";
             var controllerFileWriter = new CSFileWriter(
                 CSFileWriterType.Class,
                 codeGeneratorSettings.APISettings?.ControllersNamespace,
@@ -91,8 +91,8 @@ namespace Kangaroo.CodeGenerators.CodeWriters
             controllerFileWriter.WriteUsing(codeGeneratorSettings.APISettings?.ServicesNamespace);
             controllerFileWriter.WriteUsing(codeGeneratorSettings.APISettings?.EntitiesNamespace);
 
-            var serviceInterfaceName = "applicationUserService";
-            controllerFileWriter.WriteDependencyInjection("IApplicationUserService", serviceInterfaceName);
+            var serviceInterfaceName = "authService";
+            controllerFileWriter.WriteDependencyInjection("IAuthService", serviceInterfaceName);
 
             var insertApplicationUserMethodLines = new List<string>();
             insertApplicationUserMethodLines.Add($"return Ok(await this.{serviceInterfaceName}.InsertApplicationUserAsync(request, cancellationToken));");
@@ -120,6 +120,15 @@ namespace Kangaroo.CodeGenerators.CodeWriters
                 parameters: "[FromBody] RefreshTokenRequest request, CancellationToken cancellationToken = default",
                 attributes: new List<string>() { "HttpPost", "Authorize()" },
                 bodyLines: refreshTokenMethodLines);
+
+            var logoutMethodLines = new List<string>();
+            logoutMethodLines.Add($"return Ok(await this.{serviceInterfaceName}.LogoutAsync(request, cancellationToken));");
+            controllerFileWriter.WriteMethod(
+                "LogoutAsync",
+                returnType: "async Task<IActionResult>",
+                parameters: "[FromBody] LogoutRequest request, CancellationToken cancellationToken = default",
+                attributes: new List<string>() { "HttpPost", "Authorize()" },
+                bodyLines: logoutMethodLines);
 
             var changePasswordMethodLines = new List<string>();
             changePasswordMethodLines.Add($"return Ok(await this.{serviceInterfaceName}.ChangePasswordAsync(request, cancellationToken));");

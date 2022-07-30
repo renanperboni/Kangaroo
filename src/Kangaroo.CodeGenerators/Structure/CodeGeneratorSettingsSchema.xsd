@@ -41,13 +41,13 @@
 	<xs:complexType name="BackendEntititesSettings">
 		<xs:attribute name="EntitiesNamespace" type="xs:string" />
 		<xs:attribute name="ValidatorsNamespace" type="xs:string" />
-		<xs:attribute default="true" name="GenerateIdentityEntities" type="xs:boolean" />
+		<xs:attribute default="true" name="GenerateAuthEntities" type="xs:boolean" />
 	</xs:complexType>
 	<xs:complexType name="FrontendEntititesSettings">
 		<xs:attribute name="EntitiesNamespace" type="xs:string" />
 		<xs:attribute name="ValidatorsNamespace" type="xs:string" />
 		<xs:attribute default="true" name="GenerateNotifyPropertyChanges" type="xs:boolean" />
-		<xs:attribute default="true" name="GenerateIdentityEntities" type="xs:boolean" />
+		<xs:attribute default="true" name="GenerateAuthEntities" type="xs:boolean" />
 	</xs:complexType>
 	<xs:complexType name="BackendCustomRequestsSettings">
 		<xs:attribute name="CustomRequestsNamespace" type="xs:string" />
@@ -74,17 +74,17 @@
 		<xs:attribute name="EntitiesNamespace" type="xs:string" />
 		<xs:attribute name="ServicesNamespace" type="xs:string" />
 		<xs:attribute default="Tb" name="DatabaseEntityPrefix" type="xs:string" />
-		<xs:attribute default="" name="GenerateIdentityServiceBasedOnCustomUserClass" type="xs:string" />
+		<xs:attribute default="" name="GenerateAuthServiceBasedOnCustomUserClass" type="xs:string" />
 	</xs:complexType>
 	<xs:complexType name="APISettings">
 		<xs:attribute name="ControllersNamespace" type="xs:string" />
 		<xs:attribute name="ServicesNamespace" type="xs:string" />
 		<xs:attribute name="EntitiesNamespace" type="xs:string" />
-		<xs:attribute default="true" name="GenerateIdentityController" type="xs:boolean" />
+		<xs:attribute default="true" name="GenerateAuthController" type="xs:boolean" />
 	</xs:complexType>
 	<xs:complexType name="APIClientSettings">
 		<xs:attribute name="APIClientNamespace" type="xs:string" />
 		<xs:attribute name="EntitiesNamespace" type="xs:string" />
-		<xs:attribute default="true" name="GenerateIdentityAPIClient" type="xs:boolean" />
+		<xs:attribute default="true" name="GenerateAuthAPIClient" type="xs:boolean" />
 	</xs:complexType>
 </xs:schema>

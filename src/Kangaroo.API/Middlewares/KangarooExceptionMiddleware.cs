@@ -28,10 +28,15 @@ namespace Kangaroo.API.Middlewares
             {
                 await this.next(context);
             }
+            catch (KangarooSecurityException exception)
+            {
+                this.logger.LogError(exception.ToString());
+                await this.HandleExceptionAsync(context, exception.InternalErrorCode, exception.ErrorCode, exception.AdditionalInfo, HttpStatusCode.Unauthorized);
+            }
             catch (KangarooException exception)
             {
                 this.logger.LogError(exception.ToString());
-                await this.HandleExceptionAsync(context, exception.ErrorCode, exception.AdditionalInfo);
+                await this.HandleExceptionAsync(context, exception.InternalErrorCode, exception.ErrorCode, exception.AdditionalInfo);
             }
             catch (Exception exception)
             {
@@ -40,13 +45,14 @@ namespace Kangaroo.API.Middlewares
             }
         }
 
-        private async Task HandleExceptionAsync(HttpContext context, int? errorCode = null, string? additionalInfo = null)
+        private async Task HandleExceptionAsync(HttpContext context, KangarooErrorCode internalErrorCode = KangarooErrorCode.Others, int? errorCode = null, string? additionalInfo = null, HttpStatusCode httpStatusCode = HttpStatusCode.InternalServerError)
         {
             context.Response.ContentType = "application/json";
-            context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+            context.Response.StatusCode = (int)httpStatusCode;
             await context.Response.WriteAsync(
                 JsonSerializer.Serialize(new KangarooExceptionInfo()
                 {
+                    InternalErrorCode = internalErrorCode,
                     ErrorCode = errorCode,
                     AdditionalInfo = additionalInfo,
                 }));

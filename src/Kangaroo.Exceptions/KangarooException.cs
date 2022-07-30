@@ -7,11 +7,14 @@ namespace Kangaroo.Exceptions
 
     public class KangarooException : Exception
     {
-        public KangarooException(int? errorCode = null, string additionalInfo = null)
+        public KangarooException(KangarooErrorCode internalErrorCode = KangarooErrorCode.Others, int? errorCode = null, string additionalInfo = null)
         {
+            this.InternalErrorCode = internalErrorCode;
             this.ErrorCode = errorCode;
             this.AdditionalInfo = additionalInfo;
         }
+
+        public KangarooErrorCode InternalErrorCode { get; }
 
         public int? ErrorCode { get; }
 

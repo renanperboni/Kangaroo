@@ -3,14 +3,19 @@
 
 namespace Kangaroo.Services
 {
+    using System.Security.Claims;
+    using Kangaroo.Models.DatabaseEntities;
+
     public interface ICurrentUserService : IScopedService
     {
         public string CurrentUserId { get; }
 
-        public string CurrentUserName { get; }
+        public string CurrentUserFullName { get; }
 
         public string CurrentUserEmail { get; }
 
         public string GetCurrentUserNameToAudit();
+
+        public void SetCurrentUser(ClaimsPrincipal principal);
     }
 }
